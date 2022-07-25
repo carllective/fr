@@ -30,7 +30,7 @@
       </div>
     </div>
     <div class="meets_cards">
-      <a class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :href="`/meet/${item.url}`">
+      <a class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :href="`/${item.url}`">
         <div class="meet_card" :style="`background-image: url(${item.Image[0].url})`">
         
           <div class="meet_card_inner">

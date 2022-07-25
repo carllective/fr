@@ -59,7 +59,7 @@ export default {
   },
   mounted() {
     try {
-      this.info = this.$meets.filter(i => `/meet/${i.url}` === window.location.pathname)[0]
+      this.info = this.$meets.filter(i => `/${i.url}` === window.location.pathname)[0]
     } catch {
       window.location.href = "/";
     }

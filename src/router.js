@@ -15,7 +15,7 @@ const router = new VueRouter({
       component: () => import("./components/MeetsList.vue"),
     },
     {
-      path: "/meet/:slug",
+      path: "/:slug",
       component: () => import("./components/MeetsPage.vue"),
     },
   ],
