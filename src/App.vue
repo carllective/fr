@@ -1,28 +1,67 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <div class="logobar">
+      <div class="logobar-inner">
+        <a href="/"><img class="logo" src="./assets/Carllective Wht.png"/></a>
+      </div>
+    </div>
+    <router-view></router-view>
+
+    <FooterArea/>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import FooterArea from './components/FooterArea.vue'
 
 export default {
   name: 'App',
   components: {
-    HelloWorld
+    FooterArea
+  },
+  watch: {
+
+  },
+  computed: {
+    
+  },
+  methods: {
+    
+  },
+  data() {
+    return {
+
+    }
   }
+  
 }
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+<style lang="scss">
+@import "./styles.scss";
+
+body {
+  margin: 0;
+  overscroll-behavior: none;
+  background-color: $bg;
+}
+.logo {
+  max-width: 150px;
+
+}
+.logobar-inner {
+  margin: auto;
+  display: block;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  a {
+    display: inline-block;
+    vertical-align: middle;
+    padding: 0 20px;
+  }
+}
+.logobar {
+  background: #2F2F2F;
+  padding: 20px 0;
+  
 }
 </style>

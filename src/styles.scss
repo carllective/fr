@@ -1,0 +1,64 @@
+
+@font-face {
+    font-family: 'Reservation Wide Blk';
+    src: url('@/assets/ReservationWide-Black.eot');
+    src: url('@/assets/ReservationWide-Black.eot?#iefix') format('embedded-opentype'),
+        url('@/assets/ReservationWide-Black.woff2') format('woff2'),
+        url('@/assets/ReservationWide-Black.woff') format('woff');
+    font-weight: 900;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Reservation Wide Bd';
+    src: url('@/assets/ReservationWide-Bold.eot');
+    src: url('@/assets/ReservationWide-Bold.eot?#iefix') format('embedded-opentype'),
+        url('@/assets/ReservationWide-Bold.woff2') format('woff2'),
+        url('@/assets/ReservationWide-Bold.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+p, a, strong, span, input {
+    font-family: helvetica;
+}
+h1 {
+    font-family: "Reservation Wide Blk";
+    margin: 0;
+    font-size: 80px;
+    margin-bottom: 40px;
+    @media screen and (max-width: 1000px) {
+        font-size: 40px;
+    }
+}
+h2, h3, h4 {
+    font-family: "Reservation Wide Bd";
+    margin: 0;
+}
+h2 {
+    font-size: 26px;
+    margin-bottom: 10px;
+}
+$highlightcol: red;
+$bg: #131313;
+* {
+    color: white;
+}
+
+.button {
+    text-decoration: none;
+    padding: 10px 0px;
+    border-radius: 10px;
+    background: #424242;
+    display: inline-block;
+    text-align: center;
+    font-family: "Reservation Wide Bd";
+    cursor: pointer;
+    transition: all 1s ease;
+    &:hover {
+        transition: all 1s ease;
+        opacity: .5;
+    }
+}
