@@ -31,16 +31,16 @@
     </div>
     <div class="meets_cards">
       <a class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :href="`/${item.url}`">
-        <div class="meet_card" :style="`background-image: url(${item.Image[0].url})`">
+        <div class="meet_card" :style="`background-image: url(${item.Image ? item.Image[0].url : ''})`">
         
           <div class="meet_card_inner">
               <div class="title">
-                <h2>{{item.Name}}</h2>
-                <h3 class="location">{{item.Town}}, {{item.Province}}</h3>
+                <h2 v-if="item.Name">{{item.Name}}</h2>
+                <h3 class="location" v-if="item.Town && item.Province">{{item.Town}}, {{item.Province}}</h3>
               </div>
               <div class="date">
-                <h4 class="month">{{item.Month}}</h4>
-                <h3 class="day">{{item.Day}}</h3>
+                <h4 class="month" v-if="item.Month">{{item.Month}}</h4>
+                <h3 class="day" v-if="item.Day">{{item.Day}}</h3>
               </div>
             </div>
           

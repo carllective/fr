@@ -1,14 +1,14 @@
 <template>
   <div id="meetspage">
-    <div class="banner" :style="`background-image: url(${info.Image[0].url})`" v-if="info">
+    <div class="banner" :style="`background-image: url(${info.Image ? info.Image[0].url : ''})`" v-if="info">
       <div class="info">
         <div class="title">
-          <h1>{{info.Name}}</h1>
-          <h3 class="location">{{info.Town}}</h3>
+          <h1 v-if="info.Name">{{info.Name}}</h1>
+          <h3 class="location" v-if="info.Town">{{info.Town}}</h3>
         </div>
         <div class="date">
-          <h4 class="month">{{info.Month}}</h4>
-          <h3 class="day">{{info.Day}}</h3>
+          <h4 class="month" v-if="info.Month">{{info.Month}}</h4>
+          <h3 class="day" v-if="info.Day">{{info.Day}}</h3>
         </div>
       </div>
     </div>
