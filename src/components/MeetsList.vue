@@ -51,7 +51,7 @@
 </template>
 
 <script>
-
+import {mapState} from "vuex";
 export default {
   name: 'MeetsList',
   components: {
@@ -60,14 +60,14 @@ export default {
   
   },
   computed: {
-    
+    ...mapState(["your_location"])
   },
   methods: {
     todaysDate() {
       return new Date().toString().split(" ").splice(0, 4).join(" ");
     },
     location() {
-      return `${this.$geo.city.name}, ${this.$geo.area.code.split("-")[1]}, ${this.$geo.country.name}`;
+      return `${this.your_location.city.name}, ${this.your_location.state.name}, ${this.your_location.country.name}`;
     },
     sortBy(km) {
       this.activeOption = `Within ${km} km`;

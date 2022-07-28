@@ -17,17 +17,23 @@ export default new class Airtable {
         // Sort the meets by date if they are not yet in order
         var meets = res.data.records.map(i => i.fields).sort((a, b) => parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join("")));
 
+        // console.log(meets);
         for (let i = 0; i < meets.length; i++) {
-          var month_int = meets[i]['Date'].split(":")[0].split("T")[0].split("-")[1];
-          var day_int = meets[i]['Date'].split(":")[0].split("T")[0].split("-")[2];
-          meets[i]['Month'] = this.getMonth(month_int);
-          meets[i]['Day'] = day_int;
-          meets[i]['url'] = `${meets[i].Name.toLowerCase().split(" ").join("-")}-${meets[i].Month.toLowerCase()}-${meets[i].Day.toLowerCase()}`;
+          if (meets[i]['Date']) 
+            var month_int = meets[i]['Date'].split(":")[0].split("T")[0].split("-")[1];
+          if (meets[i]['Date']) 
+            var day_int = meets[i]['Date'].split(":")[0].split("T")[0].split("-")[2];
+          if (month_int) 
+            meets[i]['Month'] = this.getMonth(month_int);
+          if (day_int) 
+            meets[i]['Day'] = day_int;
+          if (meets[i].Name) 
+            meets[i]['url'] = `${meets[i].Name.toLowerCase().split(" ").join("-")}-${meets[i].Month.toLowerCase()}-${meets[i].Day.toLowerCase()}`;
         }
 
         Vue.prototype.$meets = meets;
 
-        console.log(meets);
+        // console.log(meets);
         resolved(meets);
       })
     })
