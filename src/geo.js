@@ -1,17 +1,22 @@
 
 var axios = require('axios');
-import Vue from "vue";
+// import Vue from "vue";
 import store from "./store.js";
 
 
 export default new class Geo {
   constructor() {
-    // this.distance();
 
   }
 
   init(params) {
     return new Promise((res) => {
+
+      // This one seems to give the locations all for free, but would have to test from different places (VPNs are flagged)
+      // axios.get("https://api.bigdatacloud.net/data/reverse-geocode-client").then((res) => {
+      //   console.log(res);
+      // })
+
 
       axios.get("https://api.bigdatacloud.net/data/client-ip").then((ip) => {
         return ip.data.ipString;
@@ -46,28 +51,12 @@ export default new class Geo {
       })
     }
 
-    distance() {
-      return new Promise((res) => {
-        const options = {
-          method: 'GET',
-          url: `https://dev.virtualearth.net/REST/v1/Routes/DistanceMatrix?origins={lat0,long0;lat1,lon1;latM,lonM}&destinations={lat0,lon0;lat1,lon1;latN,longN}&travelMode={travelMode}&startTime={startTime}&timeUnit={timeUnit}&key={BingMapsKey}`,
-        };
-        axios.request(options).then(function (response) {
-          console.log(response);
-          res(response);
-        }).catch(function (error) {
-          console.error(error);
-        });
-       
-      })
-    }
-
     nearest(params, ) {
       
      return new Promise((res) => {
         const options = {
           method: 'GET',
-          url: `https://wft-geo-db.p.rapidapi.com/v1/geo/locations/${Vue.prototype.$geo.location.latitude}${Vue.prototype.$geo.location.longitude}/nearbyCities`,
+          url: `https://wft-geo-db.p.rapidapi.com/v1/geo/locations/${store.state.your_location.location.latitude}${store.state.your_location.location.longitude}/nearbyCities`,
           params: params,
           headers: {
             'X-RapidAPI-Key': '6d50373928msh8ea7650abbc2053p1c1465jsn8d11a1823388',

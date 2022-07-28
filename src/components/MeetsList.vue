@@ -78,7 +78,9 @@ export default {
         return;
       }
      this.$geoAPI.nearest({radius: km, limit: '10', distanceUnit: 'KM', minPopulation: '100000'}).then((res) => {
-      var towns = res.data.map(i => `${i.city}, ${i.regionCode}`);
+      var towns = res.data.map(i => `${i.city}, ${i.region}`);
+      // console.log(res, towns, this.$meets);
+
         this.meets = this.$meets.filter(i => {
           if (towns.indexOf(`${i.Town}, ${i.Province}`) > -1) {
             return i;

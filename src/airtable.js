@@ -1,6 +1,7 @@
 
 var axios = require('axios');
 import Vue from "vue";
+import store from "./store.js";
 const baseId = "appTstPp0g20fQA2b";
 const tables = "tblkFpWzKkk9IbNIf";
 const api = "keyaJEowLnEfKAamU";
@@ -17,7 +18,7 @@ export default new class Airtable {
         // Sort the meets by date if they are not yet in order
         var meets = res.data.records.map(i => i.fields).sort((a, b) => parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join("")));
 
-        // console.log(meets);
+        console.log(meets, store.state.your_location);
         for (let i = 0; i < meets.length; i++) {
           if (meets[i]['Date']) 
             var month_int = meets[i]['Date'].split(":")[0].split("T")[0].split("-")[1];
