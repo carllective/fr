@@ -2,7 +2,7 @@
   <div id="meets">
     
     <div class="title-section">
-      <h3 class="pre-title">Beta Version! :)</h3>
+      <h3 class="pre-title">{Beta Mode!} All across Canada!</h3>
       <h1 class="header">Upcoming Car Meets</h1>
       <table class="today">
 
@@ -31,8 +31,7 @@
     </div>
     <div class="meets_cards">
       <a class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :href="`/${item.url}`">
-        <div class="meet_card" :style="`background-image: url(${item.Image ? item.Image[0].url : ''})`">
-        
+        <div :class="`meet_card ${item.Today ? `todaymeet` : ``}`" :style="`background-image: url(${item.Image ? item.Image[0].url : ''})`">
           <div class="meet_card_inner">
               <div class="title">
                 <h2 v-if="item.Name">{{item.Name}}</h2>
@@ -41,6 +40,7 @@
               <div class="date">
                 <h4 class="month" v-if="item.Month">{{item.Month}}</h4>
                 <h3 class="day" v-if="item.Day">{{item.Day}}</h3>
+                <p><span class="small">{{item.Time}}</span></p>
               </div>
             </div>
           
@@ -106,7 +106,7 @@ export default {
   // max-width: 1240px;
   max-width: 600px;
 
-  padding: 60px 20px;
+  padding: 40px 20px;
   margin: 40px auto 0;
   //  @media screen and (max-width: 1239px){
   //   max-width: 600px;
@@ -136,7 +136,7 @@ h1 {
   // }
   &:not(:last-child) {
     .meet_card {
-      margin: 0 auto 20px;
+      margin: 0 auto 10px;
     }
   }
 }
@@ -264,7 +264,7 @@ h1 {
   bottom: 20px;
   z-index: 1;
 }
-.day, .location, .month {
+.location {
   color: $highlightcol;
 }
 .header, .select {
@@ -280,6 +280,7 @@ h1 {
 }
 .header {
     width: 100%;
+    margin-bottom: 15px;
 }
 .meet_card_link-enter-active {
   transition: all .5s ease;
@@ -292,5 +293,30 @@ h1 {
 }
 .meet_card_link-leave-to {
   min-height: 0;
+}
+.today_highlight {
+  background: red;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.small {
+  font-weight: 200;
+  font-size: 14px;
+}
+.todaymeet {
+  &:before {
+    content: 'Today!';
+    position: absolute;
+    left: 0;
+    top: 0;
+    background: $highlightcol;
+    padding: 20px;
+    z-index: 4;
+    font-family: "Reservation Wide Bd";
+    pointer-events: none;
+  }
 }
 </style>
