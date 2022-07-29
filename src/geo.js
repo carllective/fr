@@ -27,11 +27,16 @@ export default new class Geo {
         return ip.data.ipString;
       }).then((fetched_ip) => {
 
-        var check_if_location_data_is_valid = [
-          typeof store.state.your_location.city === 'string',
-          typeof store.state.your_location.state_code === 'string',
-          typeof store.state.your_location.country === 'string',
-        ]
+
+        var check_if_location_data_is_valid = [];
+        if (store.state.your_location) {
+            check_if_location_data_is_valid = [
+            typeof store.state.your_location.city === 'string',
+            typeof store.state.your_location.state_code === 'string',
+            typeof store.state.your_location.country === 'string',
+          ]
+        }
+        
 
         // If cookie hasn't stored your location (ie. first time logging in),
         // OR your IP address changes, 
@@ -48,7 +53,7 @@ export default new class Geo {
 
           // Get your EXACT Location ("Reverse Geocoding"). Location based on IP alone was inaccurate when in public places.
           axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.coords.latitude}&lon=${e.coords.longitude}&apiKey=7f74dc1e41fd4ffaa8377ea7d95ce297`).then((location) => {
-          
+          console.log("making API call");
           // Set your location
           store.commit("setYourLocation", location.data.features[0].properties);
 
@@ -70,6 +75,7 @@ export default new class Geo {
     nearest(params) {
       
      return new Promise((res) => {
+      if (store.state.your_location) {
         const options = {
           method: 'GET',
           url: `https://wft-geo-db.p.rapidapi.com/v1/geo/locations/${store.state.your_location.lat}${store.state.your_location.lon}/nearbyCities`,
@@ -79,12 +85,14 @@ export default new class Geo {
             'X-RapidAPI-Host': 'wft-geo-db.p.rapidapi.com'
           }
         };
-        
         axios.request(options).then(function (response) {
           res(response.data)
         }).catch(function (error) {
-          console.error(error);
+          console.log("Please set your location", error);
         });
+      } else {
+        res();
+      }
      })
     }
 

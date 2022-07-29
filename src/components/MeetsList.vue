@@ -7,12 +7,16 @@
       <table class="today">
 
         <tr class="small">
-          <img class="icon" src="../assets/white/Calendar.svg"/>
-          <span v-html="todaysDate()"></span>
+          <h3>
+            <img class="icon" src="../assets/white/Calendar.svg"/>
+            <span v-html="todaysDate()"></span>
+          </h3>
         </tr>
-        <tr class="small">
-          <img class="icon" src="../assets/white/Location.svg"/>
-          <span v-html="location()"></span>
+        <tr class="small currentLocation" @click="location() === 'Set Your Location' ? null : requestLocation()">
+          <h3>
+            <img class="icon" src="../assets/white/Location.svg"/>
+            <span class="underline" v-html="location()"></span>
+          </h3>
         </tr>
 
     </table>
@@ -63,10 +67,17 @@ export default {
     ...mapState(["your_location"])
   },
   methods: {
+    requestLocation() {
+      console.log("Requesting to make location API call");
+      this.$geoAPI.init();
+    },
     todaysDate() {
       return new Date().toString().split(" ").splice(0, 4).join(" ");
     },
     location() {
+      if (!this.your_location || !this.your_location.city) {
+        return "Set Your Location";
+      }
       return `${this.your_location.city}, ${this.your_location.state_code}, ${this.your_location.country}`;
     },
     sortBy(km) {
@@ -298,6 +309,9 @@ h1 {
 .small {
   font-weight: 200;
   font-size: 14px;
+  h3 span {
+    font-family: "Reservation Wide Bd";
+  }
 }
 .todaymeet {
   &:before {
@@ -311,5 +325,8 @@ h1 {
     font-family: "Reservation Wide Bd";
     pointer-events: none;
   }
+}
+.currentLocation {
+  cursor: pointer;
 }
 </style>
