@@ -67,7 +67,6 @@ export default {
       return new Date().toString().split(" ").splice(0, 4).join(" ");
     },
     location() {
-      // console.log(this.your_location);
       return `${this.your_location.city}, ${this.your_location.state_code}, ${this.your_location.country}`;
     },
     sortBy(km) {

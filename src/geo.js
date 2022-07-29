@@ -27,9 +27,18 @@ export default new class Geo {
         return ip.data.ipString;
       }).then((fetched_ip) => {
 
-        // If cookie hasn't stored your location (ie. first time logging in) OR your IP address changes, request API call to fetch your location
+        var check_if_location_data_is_valid = [
+          typeof store.state.your_location.city === 'string',
+          typeof store.state.your_location.state_code === 'string',
+          typeof store.state.your_location.country === 'string',
+        ]
+
+        // If cookie hasn't stored your location (ie. first time logging in),
+        // OR your IP address changes, 
+        // OR the location data is gibbberish (can happen if I push changes and user ahsn't refreshed cookies),
+        // then request API call to fetch your location/
         // I based this off of IP change because it's safe to say if your IP changes, there's possibility you changed location. Reduce API calls
-      if (!store.state.your_location || fetched_ip !== store.state.your_ip) {
+      if (!store.state.your_location || fetched_ip !== store.state.your_ip || check_if_location_data_is_valid.indexOf(false) > -1) {
 
         // Store your IP
         store.commit("setYourIp", fetched_ip);
