@@ -67,7 +67,8 @@ export default {
       return new Date().toString().split(" ").splice(0, 4).join(" ");
     },
     location() {
-      return `${this.your_location.city.name}, ${this.your_location.state.name}, ${this.your_location.country.name}`;
+      // console.log(this.your_location);
+      return `${this.your_location.city}, ${this.your_location.state_code}, ${this.your_location.country}`;
     },
     sortBy(km) {
       this.activeOption = `Within ${km} km`;
@@ -294,14 +295,7 @@ h1 {
 .meet_card_link-leave-to {
   min-height: 0;
 }
-.today_highlight {
-  background: red;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100%;
-  height: 100%;
-}
+
 .small {
   font-weight: 200;
   font-size: 14px;

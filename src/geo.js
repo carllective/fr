@@ -19,54 +19,51 @@ export default new class Geo {
     return 12742 * Math.asin(Math.sqrt(a)); // 2 * R; R = 6371 km
   }
 
-  init(params) {
+  async init() {
     return new Promise((res) => {
-
-      // This one seems to give the locations all for free, but would have to test from different places (VPNs are flagged)
-      // axios.get("https://api.bigdatacloud.net/data/reverse-geocode-client").then((res) => {
-      //   console.log(res);
-      // })
-
-
+     
+      // Fetch your IP (Free unlimited API)
       axios.get("https://api.bigdatacloud.net/data/client-ip").then((ip) => {
         return ip.data.ipString;
       }).then((fetched_ip) => {
 
-        // If cookie hasn't stored your location OR your IP address changes, request API call to fetch your location
+        // If cookie hasn't stored your location (ie. first time logging in) OR your IP address changes, request API call to fetch your location
+        // I based this off of IP change because it's safe to say if your IP changes, there's possibility you changed location. Reduce API calls
       if (!store.state.your_location || fetched_ip !== store.state.your_ip) {
 
+        // Store your IP
         store.commit("setYourIp", fetched_ip);
 
-        const options = {
-          method: 'GET',
-          url: 'https://api.geoapify.com/v1/ipinfo?&apiKey=7f74dc1e41fd4ffaa8377ea7d95ce297',
-          params: params
-        };
-  
-          axios.request(options).then(function (response) {
-              store.commit("setYourLocation", response.data);
-              console.log("made Location API call");
-              res(response.data);
-          }).catch(function (error) {
-              console.error(error);
-          });
+        // Fetch your Latitude and Longitude
+        navigator.geolocation.getCurrentPosition((e) => {
+
+          // Get your EXACT Location ("Reverse Geocoding"). Location based on IP alone was inaccurate when in public places.
+          axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.coords.latitude}&lon=${e.coords.longitude}&apiKey=7f74dc1e41fd4ffaa8377ea7d95ce297`).then((location) => {
+          
+          // Set your location
+          store.commit("setYourLocation", location.data.features[0].properties);
+
+          // Return promise.
+          res(location.data.features[0].properties);
+
+          }, (error) => {
+            console.log(error, "Try again in a minute.");
+          }) 
+        })
         }
         else {
           res(store.state.your_location);
         }
-
-      })
-
-      
+       })
       })
     }
 
-    nearest(params, ) {
+    nearest(params) {
       
      return new Promise((res) => {
         const options = {
           method: 'GET',
-          url: `https://wft-geo-db.p.rapidapi.com/v1/geo/locations/${store.state.your_location.location.latitude}${store.state.your_location.location.longitude}/nearbyCities`,
+          url: `https://wft-geo-db.p.rapidapi.com/v1/geo/locations/${store.state.your_location.lat}${store.state.your_location.lon}/nearbyCities`,
           params: params,
           headers: {
             'X-RapidAPI-Key': '6d50373928msh8ea7650abbc2053p1c1465jsn8d11a1823388',
