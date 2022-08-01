@@ -15,9 +15,14 @@ const router = new VueRouter({
       component: () => import("./components/MeetsList.vue"),
     },
     {
+      path: "/map",
+      component: () => import("./components/MapPage.vue"),
+    },
+    {
       path: "/:slug",
       component: () => import("./components/MeetsPage.vue"),
     },
+    
   ],
 });
 

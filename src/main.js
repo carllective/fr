@@ -5,6 +5,7 @@ import geo from './geo';
 import store from './store';
 import router from './router';
 
+
 Vue.config.productionTip = false;
 airtable.init_airtable().then(() => {
   Vue.prototype.$geoAPI = geo;

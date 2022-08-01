@@ -1,8 +1,8 @@
 <template>
   <div id="meets">
-    
+     <!-- <div id="map"></div> -->
     <div class="title-section">
-      <h3 class="pre-title">{Beta Mode!} All across Canada!</h3>
+      <h3 class="pre-title">{Beta Mode!} Soon to be all across Canada!</h3>
       <h1 class="header">Upcoming Car Meets</h1>
       <table class="today">
 
@@ -106,6 +106,10 @@ export default {
       showDropdown: false,
       activeOption: "All"
     }
+  },
+  mounted() {
+
+
   }
   
 }
@@ -328,5 +332,8 @@ h1 {
 }
 .currentLocation {
   cursor: pointer;
+}
+#map { 
+  height: 180px;
 }
 </style>

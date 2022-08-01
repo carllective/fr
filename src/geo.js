@@ -27,7 +27,6 @@ export default new class Geo {
         return ip.data.ipString;
       }).then((fetched_ip) => {
 
-
         var check_if_location_data_is_valid = [];
         if (store.state.your_location) {
             check_if_location_data_is_valid = [
