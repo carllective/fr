@@ -6,7 +6,8 @@ Vue.use(Vuex);
 export default new Vuex.Store({
   state: {
     your_location: null,
-    your_ip: null
+    your_ip: null,
+    loading: true
   },
 
   mutations: {
@@ -16,11 +17,17 @@ export default new Vuex.Store({
     setYourIp(state, your_ip) {
       Vue.set(state, "your_ip", your_ip);
     },
+    setLoading(state, loading) {
+      Vue.set(state, "loading", loading);
+    },
   },
 
   actions: {
     setYourIp(context, your_ip) {
       context.commit("setYourIp", your_ip);
+    },
+    setLoading(context, loading) {
+      context.commit("setLoading", loading);
     },
   },
   plugins: [createPersistedState()],

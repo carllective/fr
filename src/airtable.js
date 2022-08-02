@@ -15,35 +15,40 @@ export default new class Airtable {
   }
 
   process_latlng(id, address) {
-    var Airtable = require('airtable');
-    var base = new Airtable({apiKey: api}).base('appTstPp0g20fQA2b');
-    var parsedString = address.split(" ").join("%20");
-    axios.get(`https://api.geoapify.com/v1/geocode/search?text=${parsedString}&apiKey=7f74dc1e41fd4ffaa8377ea7d95ce297`).then((res) => {
-      return {lat: res.data.features[0].properties.lat,
-        long: res.data.features[0].properties.lon}
-    }).then((coords) => {
-      base('Table 1').update([
-        {
-          "id": id,
-          "fields": {
-            "Lat": coords.lat.toString(),
-            "Long": coords.long.toString(),
-          }
-        }]);
-    });
-    
+    return new Promise((coordsRes) => {
+      var Airtable = require('airtable');
+      var base = new Airtable({apiKey: api}).base('appTstPp0g20fQA2b');
+      var parsedString = address.split(" ").join("%20");
+      axios.get(`https://api.geoapify.com/v1/geocode/search?text=${parsedString}&apiKey=7f74dc1e41fd4ffaa8377ea7d95ce297`).then((res) => {
+        return {
+          lat: res.data.features[0].properties.lat,
+          long: res.data.features[0].properties.lon
+        }
+      }).then((coords) => {
+        base('Table 1').update([
+          {
+            "id": id,
+            "fields": {
+              "Lat": coords.lat.toString(),
+              "Long": coords.long.toString(),
+            }
+          }]);
+          coordsRes(coords);
+      });
+    })
   }
 
   init_airtable() {
     return new Promise((resolved) => {
       axios.get(url).then((res) => {
-        console.log(res);
         // Sort the meets by date if they are not yet in order
         var meets = res.data.records.map(i => {
           return {...i.fields, id: i.id};
         }).sort((a, b) => parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join("")));
-        console.log(meets);
-        // console.log(meets, store.state.your_location);
+
+
+        var counter = 0;
+
         for (let i = 0; i < meets.length; i++) {
           if (meets[i]['Date'])  {
             var month_int = meets[i]['Date'].split(":")[0].split("T")[0].split("-")[1];
@@ -51,7 +56,14 @@ export default new class Airtable {
             var year_int = meets[i]['Date'].split("-")[0];
           }
           if (!meets[i]['Lat'] || !meets[i]['Long']) {
-            this.process_latlng(meets[i].id, meets[i].Address );  
+            this.process_latlng(meets[i].id, meets[i].Address).then((coords) => {
+
+              // Sets the coordinates right after it logs it into Airtable
+              meets[i]['Lat'] = coords.lat;
+              meets[i]['Long'] = coords.long;
+              // console.log(meets[i]['Lat'], meets[i]['Long']);
+
+            });  
           }
           if (month_int) 
             meets[i]['Month'] = this.getMonth(month_int);
@@ -64,12 +76,15 @@ export default new class Airtable {
           if (new Date().toString().includes(`${meets[i]['Month'].split("").splice(0, 3).join("")} ${meets[i]['Day']} ${year_int}`)) {
             meets[i]['Today'] = true;
           } 
-            
+          counter++;
         }
-        Vue.prototype.$meets = meets;
-
-        // console.log(meets);
-        resolved(meets);
+        
+        if (counter === meets.length) {
+          // console.log(meets);
+          Vue.prototype.$meets = meets;
+          resolved(meets);
+        }
+    
       })
     })
   }

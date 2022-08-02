@@ -4,19 +4,28 @@ import airtable from './airtable';
 import geo from './geo';
 import store from './store';
 import router from './router';
-
-
 Vue.config.productionTip = false;
-airtable.init_airtable().then(() => {
-  Vue.prototype.$geoAPI = geo;
-  Vue.prototype.$geoAPI.init({format: 'json'});
+store.commit("setLoading", true);
+setTimeout(() => {
+  store.commit("setLoading", false);
+}, 1500);
 
-    new Vue({
-      store,
-      router,
-      render: h => h(App),
-    }).$mount('#app')
+function initVue() {
+  return new Promise((res) => {
+    Vue.prototype.$geoAPI = geo;
+    Vue.prototype.$geoAPI.init({format: 'json'});
 
-});
+      new Vue({
+        store,
+        router,
+        render: h => h(App),
+      }).$mount('#app');
+      res();
+    })
+}
+airtable.init_airtable().then(() => initVue());
+  
+  
+
 
 

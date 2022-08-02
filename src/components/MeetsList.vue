@@ -2,7 +2,7 @@
   <div id="meets">
      <!-- <div id="map"></div> -->
     <div class="title-section">
-      <h3 class="pre-title">{Beta Mode!} Soon to be all across Canada!</h3>
+      <h3 class="pre-title">Soon to be all across Canada!</h3>
       <h1 class="header">Upcoming Car Meets</h1>
       <table class="today">
 
@@ -34,7 +34,7 @@
       </div>
     </div>
     <div class="meets_cards">
-      <a class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :href="`/${item.url}`">
+      <router-link class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :to="`/${item.url}`">
         <div :class="`meet_card ${item.Today ? `todaymeet` : ``}`" :style="`background-image: url(${item.Image ? item.Image[0].url : ''})`">
           <div class="meet_card_inner">
               <div class="title">
@@ -49,7 +49,7 @@
             </div>
           
         </div>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>
