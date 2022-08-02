@@ -12,10 +12,10 @@
             <span v-html="todaysDate()"></span>
           </h3>
         </tr>
-        <tr class="small currentLocation" @click="location() === 'Set Your Location' ? null : requestLocation()">
+        <tr class="small" id="currentLocation" @click="location() === locationCTA ? requestLocation() : null">
           <h3>
             <img class="icon" src="../assets/white/Location.svg"/>
-            <span class="underline" v-html="location()"></span>
+            <span v-html="location()"></span>
           </h3>
         </tr>
 
@@ -76,7 +76,7 @@ export default {
     },
     location() {
       if (!this.your_location || !this.your_location.city) {
-        return "Set Your Location";
+        return this.locationCTA;
       }
       return `${this.your_location.city}, ${this.your_location.state_code}, ${this.your_location.country}`;
     },
@@ -104,7 +104,8 @@ export default {
     return {
       meets: this.$meets,
       showDropdown: false,
-      activeOption: "All"
+      activeOption: "All",
+      locationCTA: "Please enable location, then click me."
     }
   },
   mounted() {
@@ -134,7 +135,6 @@ export default {
    vertical-align: middle;
   span, img {
     vertical-align: middle;
-    padding-bottom: 5px;
   }
 }
 h1 {
@@ -241,7 +241,6 @@ h1 {
 .icon {
   width: 20px;
   padding-right: 10px;
-  padding-top: 5px;
 }
 
 .title {
@@ -295,7 +294,7 @@ h1 {
 }
 .header {
     width: 100%;
-    margin-bottom: 15px;
+    margin-bottom: 4  0px;
 }
 .meet_card_link-enter-active {
   transition: all .5s ease;
@@ -313,8 +312,16 @@ h1 {
 .small {
   font-weight: 200;
   font-size: 14px;
+  h3 {
+    padding-bottom: 10px;
+  }
   h3 span {
-    font-family: "Reservation Wide Bd";
+    // font-family: "Reservation Wide Bd";
+    font-weight: 200;
+    display: inline-block;
+  }
+  span {
+    max-width: calc(100% - 30px);
   }
 }
 .todaymeet {
@@ -330,7 +337,7 @@ h1 {
     pointer-events: none;
   }
 }
-.currentLocation {
+#currentLocation {
   cursor: pointer;
 }
 #map { 

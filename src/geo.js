@@ -36,15 +36,27 @@ export default new class Geo {
         // Store your IP
         store.commit("setYourIp", fetched_ip);
 
-        // Fetch your Latitude and Longitude
-        navigator.geolocation.getCurrentPosition((e) => {
+        // Fetch your Latitude and Longitude and Location
+        this.fetchLocation().then((location) => res(location));
+        
+        }
+        else {
+          res(store.state.your_location);
+        }
+       })
+      })
+    }
 
-          // Get your EXACT Location ("Reverse Geocoding"). Location based on IP alone was inaccurate when in public places.
+    fetchLocation() {
+      console.log("setting Location...");
+
+      return new Promise((res) => {
+        navigator.geolocation.getCurrentPosition((e) => {
+        // Get your EXACT Location ("Reverse Geocoding"). Location based on IP alone was inaccurate when in public places.
           axios.get(`https://api.geoapify.com/v1/geocode/reverse?lat=${e.coords.latitude}&lon=${e.coords.longitude}&apiKey=7f74dc1e41fd4ffaa8377ea7d95ce297`).then((location) => {
           console.log("making API call");
           // Set your location
           store.commit("setYourLocation", location.data.features[0].properties);
-
           // Return promise.
           res(location.data.features[0].properties);
 
@@ -52,11 +64,6 @@ export default new class Geo {
             console.log(error, "Try again in a minute.");
           }) 
         })
-        }
-        else {
-          res(store.state.your_location);
-        }
-       })
       })
     }
 

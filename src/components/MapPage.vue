@@ -15,12 +15,12 @@ export default {
   },
   watch: {
     your_location: {
-      handler() {
-        this.$nextTick(() => {
-          this.renderMap().then(() =>  this.getMyLocation());
-        })
+      handler(e) {
+        console.log(e);
+          if (e) {
+            this.getMyLocation();
+          }
       },
-      immediate:true,
       deep:true
     }
   },
@@ -30,21 +30,21 @@ export default {
   methods: {
     renderMap() {
       return new Promise((res) => {
+        if (this.your_location) {
+          this.centerLat = this.your_location.lat;
+          this.centerLong = this.your_location.lon;
+        }
         this.map = L.map('map', {
-            center: [this.your_location.lat, this.your_location.lon],
-            zoom: 10
+            center: [this.centerLat , this.centerLong],
+            zoom: this.your_location ? 10 : 4
         });
         L.tileLayer('https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=UhqYthhZlPgjJOmBxOln', {attribution: '<a href="https://carto.com/" target="_blank">&copy; CARTO</a> <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'}).addTo(this.map);
         res(this.map);
       })
       
     },
-    getMyLocation() {
-      var myIcon = L.icon({
-          iconUrl: require('../assets/C_Map_Marker.png'),
-          iconSize: [38, 53],
-          iconAnchor: [19, 53],
-      });
+
+    async getMeetsLocations() {
 
       var meetsIcon = L.icon({
           iconUrl: require('../assets/C_Map_Marker_Car_Meets.png'),
@@ -58,17 +58,6 @@ export default {
           iconAnchor: [15, 42],
       });
 
-
-      
-      var yourmarker = L.marker([this.your_location.lat, this.your_location.lon], {icon: myIcon}).addTo(this.map)
-        .bindPopup('<p style="color: black;">Your Location</p>', {offset: L.point(0, -40)});
-
-       yourmarker.on("mouseover", () => {
-          yourmarker.openPopup();
-        });
-        yourmarker.on("mouseout", () => {
-            yourmarker.closePopup();
-          })
 
       this.$meets.forEach((i => {
 
@@ -87,17 +76,40 @@ export default {
           // })
         }
       }))
+    },
+
+    async getMyLocation() {
+      if (this.your_location) {
+        this.map.setZoom(10);
+        this.map.panTo(new L.LatLng(this.your_location.lat, this.your_location.lon));
+
+        var myIcon = L.icon({
+          iconUrl: require('../assets/C_Map_Marker.png'),
+          iconSize: [38, 53],
+          iconAnchor: [19, 53],
+        });
+
+        var yourmarker = L.marker([this.your_location.lat, this.your_location.lon], {icon: myIcon}).addTo(this.map)
+        .bindPopup('<p style="color: black;">Your Location</p>', {offset: L.point(0, -40)});
+
+        yourmarker.on("mouseover", () => {
+          yourmarker.openPopup();
+        });
+        yourmarker.on("mouseout", () => {
+          yourmarker.closePopup();
+        })
+      }
     }
   },
   data() {
     return {
-      map: null
+      map: null,
+      centerLat: 56.1304,
+      centerLong: -106.3468
     }
   },
   mounted() {
-    // if (this.your_location) {
-    //   this.renderMap();
-    // }
+   this.renderMap().then(() => Promise.all([this.getMeetsLocations(), this.getMyLocation()]));
   }
 }
 </script>
