@@ -27,7 +27,7 @@
       </table>
       <div v-if="info.Info">
        <h2>Additional Info</h2>
-        <p>{{info.Info}}</p>
+        <p v-html="parsedInfo(info.Info)"></p>
       </div>
         <div class="ctas">
           <a class="button" target="_blank" v-if="info.Calendar_Link" :href="info.Calendar_Link">Save to Calendar</a>
@@ -51,6 +51,10 @@ export default {
     
   },
   methods: {
+    parsedInfo(string) {
+      var parsed = string.replace(/(?:\r\n|\r|\n)/g, '<br />');
+      return parsed;
+    }
   },
   data() {
     return {
