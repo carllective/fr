@@ -56,7 +56,6 @@ export default new class Airtable {
           Vue.prototype.$header = res.data.records[0].fields.Header;
           Vue.prototype.$smalltext = res.data.records[0].fields.Small_Text;
         }
-        
         resolved(res);
       });
     });
