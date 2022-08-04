@@ -6,8 +6,7 @@
       </div>
     </transition>
     <div class="logobar">
-      <!-- <button v-on:click="$locale({l: 'en-US'})">English</button>
-      <button v-on:click="$locale({l: 'fr-CA'})">French</button> -->
+      
       <ul class="logobar-inner">
           <ul class="desktop nav left">
             <li class="coming_soon">
@@ -32,6 +31,10 @@
             </li>
           </ul>
       </ul>
+      <div class="langs">
+        <small><a href="/">English</a></small>
+       <small><a href="https://fr.carllective.ca">Français</a></small>
+      </div>
     </div>
     
     <router-view></router-view>
@@ -231,5 +234,22 @@ ul {
 }
 .loading-leave-to {
   opacity: 0;
+}
+.langs {
+  text-align: center;
+  small:first-child {
+    padding-right: 5px;
+  }
+  a {
+    text-decoration: none;
+    background: lightgrey;
+    padding: 5px;
+    border-radius: 10px;
+    color: black;
+  }
+  small:last-child {
+    padding-left: 5px;
+  }
+  padding-top: 20px;
 }
 </style>
