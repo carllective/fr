@@ -32,7 +32,7 @@
           </ul>
       </ul>
       <div class="langs">
-        <small><a href="/">English</a></small>
+        <small><a href="https://carllective.ca">English</a></small>
        <small><a href="https://fr.carllective.ca">Français</a></small>
       </div>
     </div>
