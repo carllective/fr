@@ -44,9 +44,19 @@ export default new class Airtable {
   init_airtable2() {
     return new Promise((resolved) => {
       axios.get(url2).then((res) => {
-        console.log(res.data.records[0].fields);
-        Vue.prototype.$header = res.data.records[0].fields.Header;
-        Vue.prototype.$smalltext = res.data.records[0].fields.Small_Text;
+        console.log(window.location.href);
+
+        // French translation
+        if (window.location.href.includes("fr.")) {
+          Vue.prototype.$header = res.data.records[0].fields.Header_fr;
+          Vue.prototype.$smalltext = res.data.records[0].fields.Small_Text_fr;
+
+        // English translation
+        } else {
+          Vue.prototype.$header = res.data.records[0].fields.Header;
+          Vue.prototype.$smalltext = res.data.records[0].fields.Small_Text;
+        }
+        
         resolved(res);
       });
     });
