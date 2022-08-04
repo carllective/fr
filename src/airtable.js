@@ -41,11 +41,15 @@ export default new class Airtable {
   init_airtable() {
     return new Promise((resolved) => {
       axios.get(url).then((res) => {
-        // Sort the meets by date if they are not yet in order
+        
+        // Meets object to include its fields and ID
         var meets = res.data.records.map(i => {
           return {...i.fields, id: i.id};
-        }).sort((a, b) => parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join("")));
-
+        })
+        // Hide the "Hidden" ones
+        .filter((i => i.Hidden !== "True"))
+        // Sort in order by Date
+        .sort((a, b) => parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join("")));
 
         var counter = 0;
 
@@ -88,6 +92,10 @@ export default new class Airtable {
       })
     })
   }
+
+  // getMonthInt(month) {
+
+  // }
 
   getMonth(int) {
     switch(int) {
