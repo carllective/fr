@@ -6,8 +6,8 @@
       </div>
     </transition>
     <div class="logobar">
-      <button v-on:click="$locale({l: 'en-US'})">English</button>
-      <button v-on:click="$locale({l: 'fr-CA'})">French</button>
+      <!-- <button v-on:click="$locale({l: 'en-US'})">English</button>
+      <button v-on:click="$locale({l: 'fr-CA'})">French</button> -->
       <ul class="logobar-inner">
           <ul class="desktop nav left">
             <li class="coming_soon">
