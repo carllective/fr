@@ -7,7 +7,7 @@ Vue.use(VueRouter);
 
 // Initialize router
 const router = new VueRouter({
-  base: "",
+  base: "/",
   mode: "history", // the hash works for slugging on prod, for now
   routes: [
     {
@@ -22,6 +22,11 @@ const router = new VueRouter({
       path: "/:slug",
       component: () => import("./components/MeetsPage.vue"),
     },
+    {
+      path: "/?:slug",
+      component: () => import("./components/MeetsPage.vue"),
+    },
+    
     
   ],
 });

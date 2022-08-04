@@ -13,6 +13,7 @@ export default new class Geo {
      
       // Fetch your IP (Free unlimited API)
       axios.get("https://api.bigdatacloud.net/data/client-ip").then((ip) => {
+        console.log(navigator.language);
         return ip.data.ipString;
       }).then((fetched_ip) => {
 

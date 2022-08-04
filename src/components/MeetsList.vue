@@ -2,8 +2,8 @@
   <div id="meets">
      <!-- <div id="map"></div> -->
     <div class="title-section">
-      <h3 class="pre-title">Soon to be all across Canada!</h3>
-      <h1 class="header">Upcoming Car Meets</h1>
+      <h3 class="pre-title">{{$smalltext}}</h3>
+      <h1 class="header">{{$header}}</h1>
       <table class="today">
 
         <tr class="small">

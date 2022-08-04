@@ -4,8 +4,10 @@ import Vue from "vue";
 // import store from "./store.js";
 const baseId = "appTstPp0g20fQA2b";
 const tables = "tblkFpWzKkk9IbNIf";
+const tables2 = "tbljvU0FGVULYx6rM";
 const api = "keyaJEowLnEfKAamU";
 const url = `https://api.airtable.com/v0/${baseId}/${tables}?api_key=${api}`;
+const url2 = `https://api.airtable.com/v0/${baseId}/${tables2}?api_key=${api}`;
 
 
 
@@ -38,6 +40,19 @@ export default new class Airtable {
     })
   }
 
+  // Fetch the rest of the website content from Airtable
+  init_airtable2() {
+    return new Promise((resolved) => {
+      axios.get(url2).then((res) => {
+        console.log(res.data.records[0].fields);
+        Vue.prototype.$header = res.data.records[0].fields.Header;
+        Vue.prototype.$smalltext = res.data.records[0].fields.Small_Text;
+        resolved(res);
+      });
+    });
+  }
+
+  // Fetch the meets from Airtable
   init_airtable() {
     return new Promise((resolved) => {
       axios.get(url).then((res) => {

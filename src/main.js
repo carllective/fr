@@ -4,7 +4,10 @@ import airtable from './airtable';
 import geo from './geo';
 import store from './store';
 import router from './router';
+import localize from './localize';
+let v_localize = localize.localize;
 Vue.config.productionTip = false;
+
 store.commit("setLoading", true);
 setTimeout(() => {
   store.commit("setLoading", false);
@@ -16,6 +19,7 @@ function initVue() {
     Vue.prototype.$geoAPI.init({format: 'json'});
 
       new Vue({
+        v_localize,
         store,
         router,
         render: h => h(App),
@@ -23,7 +27,7 @@ function initVue() {
       res();
     })
 }
-airtable.init_airtable().then(() => initVue());
+Promise.all([airtable.init_airtable(), airtable.init_airtable2()]).then(() => initVue());
   
   
 
