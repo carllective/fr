@@ -20,25 +20,26 @@
             <p>{{info.Address}}</p>
           </td>
           <td v-if="info.Time">
-            <h2>Time</h2>
+            <h2>{{lang === "en" ? "Time" : "Heure"}}</h2>
             <p>{{info.Time}}</p>
           </td>
         </tr>
       </table>
       <div v-if="info.Info">
-       <h2>Additional Info</h2>
+       <h2>{{lang === "en" ? "Details" : "Détails"}}</h2>
         <p v-html="parsedInfo(info.Info)"></p>
       </div>
         <div class="ctas">
-          <a class="button" target="_blank" v-if="info.Calendar_Link" :href="info.Calendar_Link">Save to Calendar</a>
-          <a class="button" target="_blank" v-if="info.Website_Link" :href="info.Website_Link">Visit Website</a>
-          <a class="button fullwidth" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">Buy Tickets</a>
+          <a class="button" target="_blank" v-if="info.Calendar_Link" :href="info.Calendar_Link">{{lang === "en" ? "Save To Calendar" : "Télécharger dans le Calendrier"}}</a>
+          <a class="button" target="_blank" v-if="info.Website_Link" :href="info.Website_Link">{{lang === "en" ? "Visit Website" : "Consulter le Site-web"}}</a>
+          <a class="button fullwidth" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Buy Tickets" : "Acheter des Billets"}}</a>
         </div>
     </div>
   </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
 
 export default {
   name: 'MeetsPage',
@@ -48,6 +49,7 @@ export default {
 
   },
   computed: {
+    ...mapState([ "lang"])
     
   },
   methods: {

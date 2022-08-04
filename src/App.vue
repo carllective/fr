@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div :id="`app ${lang === 'fr' ? 'fr' : 'en'}`">
     <transition appear name="loading" :key="loading">
       <div class="loading" v-if="loading">
         <img class="loadingimage" src="./assets/C.gif"/>
@@ -46,17 +46,17 @@
             Home
           </li>
            <li class="coming_soon">
-            Shop
+            {{lang === "en" ? 'Shop' : 'Magasin'}}
           </li>
            <li class="coming_soon">
-            Calendar
+            {{lang === "en" ? 'Calendar' : 'Calendrier'}}
           </li>
            <li>
               <router-link to="/map" class="mobile_a"></router-link>
-              Map
+              {{lang === "en" ? 'Map' : 'Carte'}}
           </li>
           <li class="coming_soon">
-            Settings
+            {{lang === "en" ? 'Settings' : 'Réglages'}}
           </li>
         </ul>
       </div>
@@ -195,7 +195,7 @@ ul {
 .coming_soon {
   text-decoration: line-through;
   &:after {
-    content: "Coming Soon!";
+    content: "Coming Soon";
     position: absolute;
     left: 50%;
     font-size: 12px;
@@ -205,6 +205,11 @@ ul {
     transform: translateX(-50%);
     color: $highlightcol;
     z-index: 3;
+  }
+}
+.fr .coming_soon {
+  &:after {
+    content: "À venir!";
   }
 }
 .loading {
