@@ -21,7 +21,7 @@
 
     </table>
       <div class="select">
-        <h3>Sort By</h3>
+        <h3>{{$sort_CTA}}</h3>
         <div class="dropdown">
           <p class="mainoption" @click="showDropdown = !showDropdown">{{activeOption}} <span :class="`chevron ${showDropdown ? `up` : `down`}`">▼</span></p>
           <ul :style="showDropdown ? 'height: auto; overflow: visible' : 'height: 0%; overflow: hidden'">
@@ -42,9 +42,15 @@
                 <h3 class="location" v-if="item.Town && item.Province">{{item.Town}}, {{item.Province}}</h3>
               </div>
               <div class="date">
-                <h4 class="month" v-if="item.Month">{{item.Month}}</h4>
-                <h3 class="day" v-if="item.Day">{{item.Day}}</h3>
-                <p><span class="small">{{item.Time}}</span></p>
+                <span v-if="lang === 'en'">
+                  <h4 class="month" v-if="item.Month">{{item.Month}}</h4>
+                  <h3 class="day" v-if="item.Day">{{item.Day}}</h3>
+                </span>
+                <span v-else-if="lang === 'fr'">
+                  <h3 class="day" v-if="item.Day">{{item.Day}}</h3>
+                  <h4 class="month" v-if="item.Month">{{item.Month}}</h4>
+                </span>
+                <p class="time"><span class="small">{{item.Time}}</span></p>
               </div>
             </div>
           
@@ -64,7 +70,7 @@ export default {
   
   },
   computed: {
-    ...mapState(["your_location"])
+    ...mapState(["your_location", "lang"])
   },
   methods: {
     requestLocation() {
@@ -342,5 +348,8 @@ h1 {
 }
 #map { 
   height: 180px;
+}
+.time {
+  padding-top: 10px;
 }
 </style>

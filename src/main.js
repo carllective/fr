@@ -8,6 +8,12 @@ import localize from './localize';
 let v_localize = localize.localize;
 Vue.config.productionTip = false;
 
+if (window.location.href.includes("fr.")) {
+  store.commit("setLang", "fr");
+} else {
+  store.commit("setLang", "en");
+}
+
 store.commit("setLoading", true);
 setTimeout(() => {
   store.commit("setLoading", false);

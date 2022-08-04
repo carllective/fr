@@ -7,7 +7,8 @@ export default new Vuex.Store({
   state: {
     your_location: null,
     your_ip: null,
-    loading: true
+    loading: true,
+    lang: "en"
   },
 
   mutations: {
@@ -20,6 +21,9 @@ export default new Vuex.Store({
     setLoading(state, loading) {
       Vue.set(state, "loading", loading);
     },
+    setLang(state, lang) {
+      Vue.set(state, "lang", lang);
+    },
   },
 
   actions: {
@@ -28,6 +32,9 @@ export default new Vuex.Store({
     },
     setLoading(context, loading) {
       context.commit("setLoading", loading);
+    },
+    setLang(context, lang) {
+      context.commit("setLang", lang);
     },
   },
   plugins: [createPersistedState()],

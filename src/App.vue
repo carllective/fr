@@ -6,14 +6,13 @@
       </div>
     </transition>
     <div class="logobar">
-      
       <ul class="logobar-inner">
           <ul class="desktop nav left">
             <li class="coming_soon">
-              Shop
+              {{lang === "en" ? 'Shop' : 'Magasin'}}
             </li>
             <li class="coming_soon">
-              Calendar
+              {{lang === "en" ? 'Calendar' : 'Calendrier'}}
             </li>
           </ul>
 
@@ -24,10 +23,10 @@
             </li>
             <ul class="desktop nav right">
             <li>
-              <router-link to="/map">Map</router-link>
+              <router-link to="/map">{{lang === "en" ? 'Map' : 'Carte'}}</router-link>
             </li>
             <li class="coming_soon">
-              Settings
+              {{lang === "en" ? 'Settings' : 'Réglages'}}
             </li>
           </ul>
       </ul>
@@ -76,10 +75,10 @@ export default {
 
   },
   computed: {
-    ...mapState(["loading"])
+    ...mapState(["loading", "lang"])
   },
   methods: {
-    
+  
   },
   data() {
     return {
@@ -87,6 +86,7 @@ export default {
     }
   },
   mounted() {
+
   }
   
 }

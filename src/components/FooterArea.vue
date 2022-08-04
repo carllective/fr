@@ -1,14 +1,16 @@
 <template>
   <div id="footer">
    <div class="footer-inner">
-    <a class="button signup" href="http://eepurl.com/h7ok6D">SIGN UP TO BE THE FIRST TO KNOW OF THE OFFICIAL APP LAUNCH</a>
-    <p>Copyright {{year()}} Carllective. All Rights Reserved. </p>
-   <p>Created by Rebecca Jane <a href="https://www.instagram.com/designbyrebj" target="_blank">(@designbyrebj)</a></p>
+    <a class="button signup" href="http://eepurl.com/h7ok6D">{{$CTA}}</a>
+    <p v-if="lang === 'en'">© Copyright {{year()}} Carllective. All Rights Reserved. </p>
+    <p v-else>© Copyright {{year()}} Carllective. Tous droits reservés. </p>
+   <p>{{lang === "en" ? 'Created by ' : 'Crée par '}} Rebecca Jane <a href="https://www.instagram.com/designbyrebj" target="_blank">(@designbyrebj)</a></p>
    </div>
   </div>
 </template>
 
 <script>
+import {mapState} from "vuex";
 
 export default {
   name: 'FooterArea',
@@ -18,6 +20,7 @@ export default {
 
   },
   computed: {
+    ...mapState(["lang"])
     
   },
   methods: {

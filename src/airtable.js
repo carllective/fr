@@ -1,6 +1,7 @@
 
 var axios = require('axios');
 import Vue from "vue";
+import store from "./store";
 // import store from "./store.js";
 const baseId = "appTstPp0g20fQA2b";
 const tables = "tblkFpWzKkk9IbNIf";
@@ -44,17 +45,21 @@ export default new class Airtable {
   init_airtable2() {
     return new Promise((resolved) => {
       axios.get(url2).then((res) => {
-        console.log(window.location.href);
+        console.log(res.data.records[0].fields);
 
         // French translation
-        if (window.location.href.includes("fr.")) {
+        if (store.state.lang === "fr") {
           Vue.prototype.$header = res.data.records[0].fields.Header_fr;
           Vue.prototype.$smalltext = res.data.records[0].fields.Small_Text_fr;
+          Vue.prototype.$CTA = res.data.records[0].fields.CTA_fr;
+          Vue.prototype.$sort_CTA = res.data.records[0].fields.Sort_CTA_fr;
 
         // English translation
         } else {
           Vue.prototype.$header = res.data.records[0].fields.Header;
           Vue.prototype.$smalltext = res.data.records[0].fields.Small_Text;
+          Vue.prototype.$CTA = res.data.records[0].fields.CTA;
+          Vue.prototype.$sort_CTA = res.data.records[0].fields.Sort_CTA;
         }
         
         resolved(res);
@@ -94,8 +99,15 @@ export default new class Airtable {
 
             });  
           }
-          if (month_int) 
+
+          // English month
+          if (month_int && store.state.lang !== "fr") 
             meets[i]['Month'] = this.getMonth(month_int);
+
+          // French month
+          else if (month_int && store.state.lang === "fr")
+            meets[i]['Month'] = this.getMonth_fr(month_int);
+
           if (day_int) 
             meets[i]['Day'] = day_int;
           if (meets[i].Name) 
@@ -118,9 +130,46 @@ export default new class Airtable {
     })
   }
 
-  // getMonthInt(month) {
-
-  // }
+  getMonth_fr(int) {
+    switch(int) {
+      case "01": {
+        return "Janvier";
+      }
+      case "02": {
+        return "Fevrier";
+      }
+      case "03": {
+        return "Mars";
+      }
+      case "04": {
+        return "Avril";
+      }
+      case "05": {
+        return "Mai";
+      }
+      case "06": {
+        return "Juin";
+      }
+      case "07": {
+        return "Juillet";
+      }
+      case "08": {
+        return "Aout";
+      }
+      case "09": {
+        return "Semptembre";
+      }
+      case "10": {
+        return "Octobre";
+      }
+      case "11": {
+        return "Novembre";
+      }
+      case "12": {
+        return "Decembre";
+      }
+    }
+  }
 
   getMonth(int) {
     switch(int) {
