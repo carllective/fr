@@ -3,7 +3,6 @@ var axios = require('axios');
 // import Vue from "vue";
 import store from "./store.js";
 
-
 export default new class Geo {
   constructor() {
   }
@@ -13,7 +12,6 @@ export default new class Geo {
      
       // Fetch your IP (Free unlimited API)
       axios.get("https://api.bigdatacloud.net/data/client-ip").then((ip) => {
-        console.log(navigator.language);
         return ip.data.ipString;
       }).then((fetched_ip) => {
 

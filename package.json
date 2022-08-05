@@ -26,6 +26,7 @@
     "axios": "^0.27.2",
     "eslint": "^7.32.0",
     "eslint-plugin-vue": "^8.0.3",
+    "latitude-longitude": "^1.1.1",
     "sass": "^1.54.0",
     "sass-loader": "^13.0.2",
     "vue-router": "^2.8.1",

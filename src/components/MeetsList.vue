@@ -2,8 +2,9 @@
   <div id="meets">
      <!-- <div id="map"></div> -->
     <div class="title-section">
-      <h3 class="pre-title">{{$smalltext}}</h3>
       <h1 class="header">{{$header}}</h1>
+      <h3 class="pre-title">{{$smalltext}}</h3>
+
       <table class="today">
 
         <tr class="small">
@@ -25,10 +26,11 @@
         <div class="dropdown">
           <p class="mainoption" @click="showDropdown = !showDropdown">{{activeOption}} <span :class="`chevron ${showDropdown ? `up` : `down`}`">▼</span></p>
           <ul :style="showDropdown ? 'height: auto; overflow: visible' : 'height: 0%; overflow: hidden'">
-            <li @click="sortBy(`0`)">All</li>
+            <li @click="sortBy(`0`)">Date</li>
+            <li @click="sortBy(`Distance`)">Distance</li>
             <li @click="sortBy(`10`)">Within 10km</li>
+            <li @click="sortBy(`20`)">Within 20km</li>
             <li @click="sortBy(`50`)">Within 50km</li>
-            <li @click="sortBy(`100`)">Within 100km</li>
           </ul>
         </div>
       </div>
@@ -78,11 +80,11 @@ export default {
       this.$geoAPI.init();
     },
     todaysDate() {
-      // if (this.lang === "fr") {
+      if (this.lang === "fr") {
         return new Date().toLocaleString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      // } else {
-      //   return new Date().toString().split(" ").splice(0, 4).join(" ");
-      // }
+      } else {
+        return new Date().toString().split(" ").splice(0, 4).join(" ");
+      }
       
     },
     location() {
@@ -92,30 +94,32 @@ export default {
       return `${this.your_location.city}, ${this.your_location.state_code}, ${this.your_location.country}`;
     },
     sortBy(km) {
-      this.activeOption = `Within ${km} km`;
-      this.showDropdown = false;
       if (km === "0") {
+        console.log(this.$meets);
         this.meets = this.$meets;
-        this.activeOption = `All`;
+        this.activeOption = `Date`;
+        this.showDropdown = false;
+
         return;
       }
-     this.$geoAPI.nearest({radius: km, limit: '10', distanceUnit: 'KM', minPopulation: '100000'}).then((res) => {
-      var towns = res.data.map(i => `${i.city}, ${i.region}`);
-      // console.log(res, towns, this.$meets);
-
-        this.meets = this.$meets.filter(i => {
-          if (towns.indexOf(`${i.Town}, ${i.Province}`) > -1) {
-            return i;
-          }
-        })
-      })
+      if (km === "Distance") {
+        this.meets = [...this.$meets].sort((a, b) => a.DistanceFromMe - b.DistanceFromMe);
+        this.activeOption = `Distance`;
+        this.showDropdown = false;
+        return;
+      }
+      this.activeOption = `Within ${km} km`;
+      this.showDropdown = false;
+      
+      
+      this.meets = [...this.$meets].filter(i => i.DistanceFromMe <= km);
     }
   },
   data() {
     return {
       meets: this.$meets,
       showDropdown: false,
-      activeOption: "All",
+      activeOption: "Date",
       locationCTA: "Please enable location, then click me."
     }
   },
@@ -131,7 +135,7 @@ export default {
 @import "../styles.scss";
 #meets {
   // max-width: 1240px;
-  max-width: 600px;
+  max-width: 700px;
 
   padding: 40px 20px;
   margin: 40px auto 0;
@@ -144,7 +148,7 @@ export default {
     text-transform: capitalize;
   }
   margin: 0;
-  width: 70%;
+  width: 60%;
   display: inline-block;
    vertical-align: middle;
   span, img {
@@ -158,14 +162,14 @@ h1 {
 
 .meet_card_link {
   display:inline-block;
-  max-width: 580px;
+  max-width: 700px;
   width: 100%;
   // @media screen and (min-width: 1240px){
   //   padding: 0 10px;
   // }
   &:not(:last-child) {
     .meet_card {
-      margin: 0 auto 10px;
+      margin: 0 auto 20px;
     }
   }
 }
@@ -230,7 +234,7 @@ h1 {
     overflow: hidden;
     list-style: none;
     position: absolute;
-    top: 0;
+    top: 100%;
     left: 0;
     z-index: 2;
     width: 100%;
@@ -283,8 +287,8 @@ h1 {
 }
 
 .pre-title {
-  margin: 0;
   color: $highlightcol;
+  margin-bottom: 40px;
 }
 .meet_card_inner {
   position: absolute;
@@ -299,7 +303,7 @@ h1 {
   display: inline-block;
 }
 .select {
- width: 30%;
+ width: 40%;
  padding-bottom: 20px;
  vertical-align: middle;
  h3 {
@@ -308,7 +312,7 @@ h1 {
 }
 .header {
     width: 100%;
-    margin-bottom: 4  0px;
+   margin-bottom: 10px;
 }
 .meet_card_link-enter-active {
   transition: all .5s ease;
@@ -359,5 +363,8 @@ h1 {
 }
 .time {
   padding-top: 10px;
+}
+.title-section {
+  padding-bottom: 30px;
 }
 </style>

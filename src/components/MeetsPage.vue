@@ -1,10 +1,11 @@
 <template>
   <div id="meetspage">
+    
     <div class="banner" :style="`background-image: url(${info.Image ? info.Image[0].url : ''})`" v-if="info">
       <div class="info">
         <div class="title">
           <h1 v-if="info.Name">{{info.Name}}</h1>
-          <h3 class="location" v-if="info.Town">{{info.Town}}</h3>
+          <h3 class="location" v-if="info.Town">{{info.Town}}, {{info.Province}}</h3>
         </div>
         <div class="date">
           <span v-if="lang === 'en'">
@@ -18,6 +19,9 @@
         </div>
       </div>
     </div>
+    <div class="page-wrapper">
+    <div id="map"></div>
+
     <div class="page"  v-if="info">
       <table class="pageinfo">
         <tr>
@@ -41,11 +45,13 @@
           <a class="button fullwidth" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Buy Tickets" : "Acheter des Billets"}}</a>
         </div>
     </div>
+    </div>
   </div>
 </template>
 
 <script>
 import {mapState} from "vuex";
+var L = require('leaflet');
 
 export default {
   name: 'MeetsPage',
@@ -62,19 +68,44 @@ export default {
     parsedInfo(string) {
       var parsed = string.replace(/(?:\r\n|\r|\n)/g, '<br />');
       return parsed;
-    }
+    },
+    renderMap() {
+      return new Promise((res) => {
+        
+        this.map = L.map('map', {
+            center: [this.info.Lat , this.info.Long],
+            zoom: 12
+        });
+        L.tileLayer('https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=UhqYthhZlPgjJOmBxOln', {attribution: '<a href="https://carto.com/" target="_blank">&copy; CARTO</a> <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'}).addTo(this.map);
+        
+        var meetsIconToday = L.icon({
+          iconUrl: require('../assets/C_Map_Marker_Car_Meets_TODAY.png'),
+          iconSize: [30, 42],
+          iconAnchor: [15, 42],
+      });
+
+      L.marker([this.info.Lat, this.info.Long], {icon: meetsIconToday}).addTo(this.map);
+        
+        res(this.map);
+      })
+      
+    },
   },
   data() {
     return {
-      info:null
+      info:null,
+      map: null
     }
   },
   mounted() {
-    try {
-      this.info = this.$meets.filter(i => `/${i.url}` === window.location.pathname)[0];
-    } catch {
-      // window.location.href = "/";
-    }
+    new Promise((res) => {
+      try {
+        this.info = this.$meets.filter(i => `/${i.url}` === window.location.pathname)[0];
+        res(this.info);
+      } catch {
+        window.location.href = "/";
+      }
+    }).then(() => this.renderMap());
   }
   
 }
@@ -89,6 +120,13 @@ export default {
 .page {
   padding: 60px 20px;
   margin: 0 auto;
+  display: inline-block;
+  @media screen and (max-width: 800px) {
+    width: 100%;
+  }
+  @media screen and (min-width: 801px) {
+    width: 50%;
+  }
 }
 .banner {
   height: 50vh;
@@ -115,19 +153,20 @@ export default {
 
 .title {
   margin-left: 20px;
+  max-width: calc(100% - 40px);
 }
 .date {
   text-align: right;
   right: 20px;
   position: absolute;
-  bottom: 0;
+  bottom: 20px;
   z-index: 1;
 }
 .info {
   position: absolute;
   bottom: 0;
   z-index: 1;
-  max-width: 600px;
+  max-width: 900px;
   width: 100%;
   left: 50%;
   transform: translateX(-50%);
@@ -137,13 +176,18 @@ export default {
   font-family: 'Reservation Wide Blk';
   font-size: 30px;
   color: $highlightcol;
-  padding-bottom: 20px;
+  padding-bottom: 5%;
 }
 .month {
   color: $highlightcol;
 }
 .page {
-  max-width: 560px;
+  @media screen and (min-width: 801px) {
+    width: calc(50% - 60px);
+  }
+  @media screen and (max-width: 800px) {
+    width: calc(100% - 40px);
+  }
   h2, p {
     color: black;
   }
@@ -155,6 +199,9 @@ export default {
   }
   td {
     padding-bottom: 40px;
+    &:last-child {
+      padding-left: 20px;
+    }
   }
 }
 .button {
@@ -170,4 +217,24 @@ export default {
 .ctas {
   padding-top: 40px;
 }
+#map {
+  
+  @media screen and (max-width: 800px) {
+    height: 200px;
+    width: 100%;
+  }
+  @media screen and (min-width: 801px) {
+    width: 50%;
+    min-height: 500px;
+    height: 100%;
+  }
+  
+  display: inline-block;
+  margin-right: 20px;
+  z-index: 0;
+}
+#map, .page {
+  vertical-align: middle;
+}
+
 </style>

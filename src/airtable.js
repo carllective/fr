@@ -1,6 +1,7 @@
 
 var axios = require('axios');
 import Vue from "vue";
+import latlng from "latitude-longitude";
 import store from "./store";
 // import store from "./store.js";
 const baseId = "appTstPp0g20fQA2b";
@@ -15,6 +16,10 @@ const url2 = `https://api.airtable.com/v0/${baseId}/${tables2}?api_key=${api}`;
 export default new class Airtable {
   constructor() {
     // this.process_latlng();
+  }
+
+  distance(coords) {
+    return latlng.getDistance([store.state.your_location.lat, store.state.your_location.lon], [coords.lat, coords.lng]);
   }
 
   process_latlng(id, address) {
@@ -98,8 +103,10 @@ export default new class Airtable {
               // console.log(meets[i]['Lat'], meets[i]['Long']);
 
             });  
+          } else {
+            meets[i]['DistanceFromMe'] = this.distance({lat: parseFloat(meets[i]['Lat']), lng: parseFloat(meets[i]['Long'])});
           }
-
+        
           // English month
           if (month_int && store.state.lang !== "fr") 
             meets[i]['Month'] = this.getMonth(month_int);
@@ -117,6 +124,7 @@ export default new class Airtable {
           if (new Date().toString().includes(`${meets[i]['Month'].split("").splice(0, 3).join("")} ${meets[i]['Day']} ${year_int}`)) {
             meets[i]['Today'] = true;
           } 
+          
           counter++;
         }
         
