@@ -136,7 +136,7 @@ export default new class Airtable {
         return "Janvier";
       }
       case "02": {
-        return "Fevrier";
+        return "Février";
       }
       case "03": {
         return "Mars";
@@ -154,10 +154,10 @@ export default new class Airtable {
         return "Juillet";
       }
       case "08": {
-        return "Aout";
+        return "Août";
       }
       case "09": {
-        return "Semptembre";
+        return "Septembre";
       }
       case "10": {
         return "Octobre";
@@ -166,7 +166,7 @@ export default new class Airtable {
         return "Novembre";
       }
       case "12": {
-        return "Decembre";
+        return "Décembre";
       }
     }
   }

@@ -78,7 +78,12 @@ export default {
       this.$geoAPI.init();
     },
     todaysDate() {
-      return new Date().toString().split(" ").splice(0, 4).join(" ");
+      // if (this.lang === "fr") {
+        return new Date().toLocaleString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
+      // } else {
+      //   return new Date().toString().split(" ").splice(0, 4).join(" ");
+      // }
+      
     },
     location() {
       if (!this.your_location || !this.your_location.city) {
@@ -135,6 +140,9 @@ export default {
   //  }
 }
 .today {
+  span {
+    text-transform: capitalize;
+  }
   margin: 0;
   width: 70%;
   display: inline-block;

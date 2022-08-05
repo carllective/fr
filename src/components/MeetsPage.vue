@@ -7,8 +7,14 @@
           <h3 class="location" v-if="info.Town">{{info.Town}}</h3>
         </div>
         <div class="date">
-          <h4 class="month" v-if="info.Month">{{info.Month}}</h4>
-          <h3 class="day" v-if="info.Day">{{info.Day}}</h3>
+          <span v-if="lang === 'en'">
+            <h4 class="month" v-if="info.Month">{{info.Month}}</h4>
+            <h3 class="day" v-if="info.Day">{{info.Day}}</h3>
+        </span>
+        <span v-else>
+            <h3 class="day" v-if="info.Day">{{info.Day}}</h3>
+            <h4 class="month" v-if="info.Month">{{info.Month}}</h4>
+        </span>
         </div>
       </div>
     </div>

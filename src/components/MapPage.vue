@@ -25,7 +25,7 @@ export default {
     }
   },
   computed: {
-    ...mapState(["your_location"])
+    ...mapState(["your_location", "lang"])
   },
   methods: {
     renderMap() {
@@ -67,7 +67,7 @@ export default {
           var marker = L.marker([i.Lat, i.Long], {icon: i.Today ? meetsIconToday : meetsIcon}).addTo(this.map)
           .bindPopup(`${i.Today ? `<h3 style="color: red; text-align: center;">TODAY!</h3>` : ``}<h3 style="color: black; margin: 0; text-align: center;">${i.Name}</h3>
           <p style="color: black; margin: 0; text-align: center;">${i.Address}</p>
-          <p style="text-align: center;"><a href="${i.url}" >Read More</a></p>`, {offset: L.point(0, -30)});
+          <p style="text-align: center;"><a href="${i.url}" >${this.lang === 'en' ? 'Read More' : 'Lire Plus'}</a></p>`, {offset: L.point(0, -30)});
           marker.on("mouseover", () => {
             marker.openPopup();
           });
