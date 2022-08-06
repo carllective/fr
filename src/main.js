@@ -14,8 +14,6 @@ if (window.location.href.includes("fr.")) {
   store.commit("setLang", "en");
 }
 
-store.commit("setLang", "fr");
-
 store.commit("setLoading", true);
 setTimeout(() => {
   store.commit("setLoading", false);
