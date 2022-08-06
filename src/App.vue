@@ -110,9 +110,7 @@ body {
   max-width: 100vw;
 }
 .logo {
-    height: 100%;
-    // max-height: 10vh;
-    height: 100%;
+    height: auto;
     max-width: 130px;
     min-width: 120px;
 }
