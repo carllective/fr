@@ -19,6 +19,14 @@ const router = new VueRouter({
       component: () => import("./components/MapPage.vue"),
     },
     {
+      path: "/calendar",
+      component: () => import("./components/CalendarPage.vue"),
+    },
+    {
+      path: "/calendrier",
+      component: () => import("./components/CalendarPage.vue"),
+    },
+    {
       path: "/:slug",
       component: () => import("./components/MeetsPage.vue"),
     },

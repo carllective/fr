@@ -1,5 +1,5 @@
 <template>
-  <div :id="`app ${lang === 'fr' ? 'fr' : 'en'}`">
+  <div id="app" :class="lang === 'fr' ? 'fr' : 'en'">
     <transition appear name="loading" :key="loading">
       <div class="loading" v-if="loading">
         <img class="loadingimage" src="./assets/C.gif"/>
@@ -8,11 +8,14 @@
     <div class="logobar">
       <ul class="logobar-inner">
           <ul class="desktop nav left">
-            <li class="coming_soon">
-              {{lang === "en" ? 'Shop' : 'Magasin'}}
+            <li>
+               <router-link :to="lang === 'en' ? '/calendar' : '/calendrier'">{{lang === "en" ? 'Calendar' : 'Calendrier'}}</router-link>
+            </li>
+            <li>
+              <router-link to="/map">Map</router-link>
             </li>
             <li class="coming_soon">
-              {{lang === "en" ? 'Calendar' : 'Calendrier'}}
+              {{lang === "en" ? 'Shop' : 'Magasin'}}
             </li>
           </ul>
 
@@ -20,23 +23,26 @@
             <router-link to="/">
               <img class="logo" src="./assets/Carllective Wht.png"/>
             </router-link>
-            </li>
+          </li>
             <ul class="desktop nav right">
-            <li>
-              <router-link to="/map">{{lang === "en" ? 'Map' : 'Carte'}}</router-link>
-            </li>
             <li class="coming_soon">
               {{lang === "en" ? 'Settings' : 'Réglages'}}
             </li>
+            <li>
+              <div class="langs">
+                <small><a href="https://carllective.ca">English</a></small>
+                <small><a href="https://fr.carllective.ca">Français</a></small>
+              </div>
+            </li>
           </ul>
+          <div class="langs mobile">
+            <small><a href="https://carllective.ca">English</a></small>
+            <small><a href="https://fr.carllective.ca">Français</a></small>
+            </div>
       </ul>
-      <div class="langs">
-        <small><a href="https://carllective.ca">English</a></small>
-       <small><a href="https://fr.carllective.ca">Français</a></small>
-      </div>
+      
     </div>
-    
-    <router-view></router-view>
+    <router-view class="view"></router-view>
 
     <FooterArea/>
     <div class="mobile_logobar">
@@ -48,9 +54,10 @@
            <li class="coming_soon">
             {{lang === "en" ? 'Shop' : 'Magasin'}}
           </li>
-           <li class="coming_soon">
-            {{lang === "en" ? 'Calendar' : 'Calendrier'}}
-          </li>
+           <li>
+               <router-link class="mobile_a" :to="lang === 'en' ? '/calendar' : '/calendrier'"></router-link>
+               {{lang === "en" ? 'Calendar' : 'Calendrier'}}
+            </li>
            <li>
               <router-link to="/map" class="mobile_a"></router-link>
               {{lang === "en" ? 'Map' : 'Carte'}}
@@ -98,12 +105,15 @@ export default {
 body {
   margin: 0;
   overscroll-behavior: none;
+  overflow-x: hidden;
   background-color: $bg;
+  max-width: 100vw;
 }
 .logo {
     height: 100%;
     // max-height: 10vh;
-    width: 10vw;
+    height: 100%;
+    max-width: 130px;
     min-width: 120px;
 }
 .logobar-inner {
@@ -116,25 +126,34 @@ body {
   }
 }
 .logobar {
+  position: fixed;
   background: #2F2F2F;
   padding: 2vh 0;
-  position: relative;
--webkit-box-shadow: 0px 9px 14px 0px rgba(0,0,0,0.2); 
-box-shadow: 0px 9px 14px 0px rgba(0,0,0,0.2);
+  width: 100%;
+  top: 0;
+  z-index: 10;
+  // position: relative;
+  -webkit-box-shadow: 0px 9px 14px 0px rgba(0,0,0,0.2); 
+  box-shadow: 0px 9px 14px 0px rgba(0,0,0,0.2);
 }
 ul {
   padding: 0;
   li {
-    font-family: Helvetica;
-    padding: 0 30px;
+    font-family: "Reservation Wide Bd";
+    padding:0 20px;
     position: relative;
+    font-size: 14px;
+  }
+  a {
+    font-family: "Reservation Wide Bd";
+    text-decoration: none;
   }
 }
 .nav {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
-  width: calc(45vw - 40px);
+  width: calc(45vw - 30px);
 }
 .left {
   left: 0;
@@ -209,7 +228,7 @@ ul {
 }
 .fr .coming_soon {
   &:after {
-    content: "À venir!";
+    content: "À venir!" !important;
   }
 }
 .loading {
@@ -241,20 +260,38 @@ ul {
   opacity: 0;
 }
 .langs {
+  // @media screen and (min-width: 1001px) {
+  //   position: absolute;
+  //   right: 0;
+  //   top: 50%;
+  //   transform: translateY(-50%);
+  // }
   text-align: center;
   small:first-child {
     padding-right: 5px;
+  }
+  small {
+    font-size: 10px;
   }
   a {
     text-decoration: none;
     background: lightgrey;
     padding: 5px;
-    border-radius: 10px;
+    border-radius: 5px;
     color: black;
   }
   small:last-child {
     padding-left: 5px;
   }
-  padding-top: 20px;
+  
+  @media screen and (max-width: 1000px) {
+    padding-top: 20px;
+  }
 }
+.mobile {
+  @media screen and (min-width: 1001px) {
+    display: none;
+  }
+}
+
 </style>

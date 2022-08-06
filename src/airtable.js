@@ -121,10 +121,13 @@ export default new class Airtable {
             meets[i]['url'] = `${meets[i].Name.toLowerCase().split(" ").join("-")}-${meets[i].Month.toLowerCase()}-${meets[i].Day.toLowerCase()}`;
 
           // If this meet is today, add an extra property to the array so you can highlight it in the DOM
-          if (new Date().toString().includes(`${meets[i]['Month'].split("").splice(0, 3).join("")} ${meets[i]['Day']} ${year_int}`)) {
+          if (new Date().toString().includes(`${meets[i]['Month'].split("").splice(0, 3).join("")} ${meets[i]['Day']} ${year_int}`) ||
+          // in french
+          new Date().toLocaleString('fr-FR', {month: "long", day: "2-digit", year: "numeric"}).localeCompare(`${meets[i]['Day']} ${meets[i]['Month']} ${year_int}`) >= 1) {
             meets[i]['Today'] = true;
           } 
-          
+         
+          console.log();
           counter++;
         }
         

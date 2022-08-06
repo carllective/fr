@@ -110,6 +110,7 @@ export default {
   },
   mounted() {
    this.renderMap().then(() => Promise.all([this.getMeetsLocations(), this.getMyLocation()]));
+   window.scrollTo(0, 0);
   }
 }
 </script>

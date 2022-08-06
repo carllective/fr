@@ -1,41 +1,56 @@
 <template>
-  <div id="meets">
+  <div id="meets" :class="lang === 'fr' ? 'fr' : 'en' ">
      <!-- <div id="map"></div> -->
     <div class="title-section">
       <h1 class="header">{{$header}}</h1>
-      <h3 class="pre-title">{{$smalltext}}</h3>
+      <h2 class="pre-title">{{$smalltext}}</h2>
 
-      <table class="today">
-
-        <tr class="small">
-          <h3>
-            <img class="icon" src="../assets/white/Calendar.svg"/>
-            <span v-html="todaysDate()"></span>
-          </h3>
-        </tr>
-        <tr class="small" id="currentLocation" @click="location() === locationCTA ? requestLocation() : null">
+      <div class="today">
+        <div class="small" id="currentLocation" @click="location() === locationCTA ? requestLocation() : null">
           <h3>
             <img class="icon" src="../assets/white/Location.svg"/>
             <span v-html="location()"></span>
           </h3>
-        </tr>
+        </div>
 
-    </table>
+        <div class="small" id="currentDate">
+        <h3>
+          <img class="icon" src="../assets/white/Calendar.svg"/>
+          <div class="date">
+            <span>
+              <h4>{{todaysDate("month")}}</h4>
+              <h3>{{todaysDate("day")}}</h3>
+            </span>
+          </div>
+        </h3>
+      </div>
+    </div>
       <div class="select">
-        <h3>{{$sort_CTA}}</h3>
-        <div class="dropdown">
-          <p class="mainoption" @click="showDropdown = !showDropdown">{{activeOption}} <span :class="`chevron ${showDropdown ? `up` : `down`}`">▼</span></p>
-          <ul :style="showDropdown ? 'height: auto; overflow: visible' : 'height: 0%; overflow: hidden'">
-            <li @click="sortBy(`0`)">Date</li>
-            <li @click="sortBy(`Distance`)">Distance</li>
-            <li @click="sortBy(`10`)">Within 10km</li>
-            <li @click="sortBy(`20`)">Within 20km</li>
-            <li @click="sortBy(`50`)">Within 50km</li>
-          </ul>
+        <div class="dropdown-wrapper">
+          <p class="label">{{$sort_CTA}}</p>
+          <div class="dropdown">
+            <p class="mainoption" @click="showDropdownHandler">{{Number.isInteger(activeFilter) ? (lang === "fr" ? `Rayon de ${activeFilter} km` : `Within ${activeFilter} km`) : activeFilter}} <span :class="`chevron ${showDropdown ? `up` : `down`}`">▼</span></p>
+            <ul :style="showDropdown ? 'height: auto; overflow: visible' : 'height: 0%; overflow: hidden'">
+            <li @click="sortBy(`Date`)">Date</li>
+              <li @click="sortBy(`Distance`)">Distance</li>
+              <li @click="sortBy(10)">{{lang === "fr" ?  `Rayon de 10 km` : `Within 10 km`}}</li>
+              <li @click="sortBy(20)">{{lang === "fr" ?  `Rayon de 20 km` : `Within 10 km`}}</li>
+              <li @click="sortBy(50)">{{lang === "fr" ?  `Rayon de 50 km` : `Within 10 km`}}</li>
+            </ul>
+          </div>
+        </div>
+        <div class="dropdown-wrapper">
+          <p class="provincetitle label">Province</p>
+          <div class="dropdown">
+            <p class="mainoption" @click="showProvDropdownHandler">{{activeProvince}} <span :class="`chevron ${showProvDropdown ? `up` : `down`}`">▼</span></p>
+            <ul :style="showProvDropdown ? 'height: auto; overflow: visible' : 'height: 0%; overflow: hidden'">
+                <li v-for="(item, i) in provinces" :key="i" @click="sortByProvince(item)">{{lang === "fr" ? item.fr : item.en}}</li>
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-    <div class="meets_cards">
+    <div class="meets_cards" v-if="meets.length">
       <router-link class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :to="`/${item.url}`">
         <div :class="`meet_card ${item.Today ? `todaymeet` : ``}`" :style="`background-image: url(${item.Image ? item.Image[0].url : ''})`">
           <div class="meet_card_inner">
@@ -59,6 +74,9 @@
         </div>
       </router-link>
     </div>
+    <div v-else>
+      <p>{{lang === "fr" ? 'Aucun résultat.' : 'No Results.'}}</p>
+    </div>
   </div>
 </template>
 
@@ -69,7 +87,6 @@ export default {
   components: {
   },
   watch: {
-  
   },
   computed: {
     ...mapState(["your_location", "lang"])
@@ -79,13 +96,27 @@ export default {
       console.log("Requesting to make location API call");
       this.$geoAPI.init();
     },
-    todaysDate() {
-      if (this.lang === "fr") {
-        return new Date().toLocaleString('fr-FR', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' });
-      } else {
-        return new Date().toString().split(" ").splice(0, 4).join(" ");
+    todaysDate(what) {
+      if (what === "month") {
+        if (this.lang === "fr") {
+          return new Date().toLocaleString('fr-FR', { month: 'long'});
+        } else {
+          return new Date().toLocaleString('en-US', { month: 'long'});
+        }
+      }
+      else if (what === "day") {
+        return new Date().toString().split(" ")[2];
       }
       
+  
+    },
+    showDropdownHandler() {
+      this.showDropdown = !this.showDropdown;
+      if (this.showDropdown) this.showProvDropdown = false;
+    },
+    showProvDropdownHandler() {
+      this.showProvDropdown = !this.showProvDropdown;
+      if (this.showProvDropdown) this.showDropdown = false;
     },
     location() {
       if (!this.your_location || !this.your_location.city) {
@@ -93,38 +124,77 @@ export default {
       }
       return `${this.your_location.city}, ${this.your_location.state_code}, ${this.your_location.country}`;
     },
-    sortBy(km) {
-      if (km === "0") {
-        console.log(this.$meets);
+    sortByProvince(prov) {
+       if (prov.en === "Canada-Wide") {
         this.meets = this.$meets;
-        this.activeOption = `Date`;
-        this.showDropdown = false;
+        this.showProvDropdown = false;
+        this.activeProvince = this.lang === "fr" ? prov.fr : prov.en;
+        this.sortBy(this.activeFilter);
+        return;
+      }
+      this.meets_sorted_by_province = [...this.$meets].filter(i => i.Province === prov.en);
+      this.meets = this.meets_sorted_by_province;
+      this.showProvDropdown = false;
+      this.activeProvince = this.lang === "fr" ? prov.fr : prov.en;
+      this.sortBy(this.activeFilter);
+      console.log(this.meets);
 
-        return;
-      }
-      if (km === "Distance") {
-        this.meets = [...this.$meets].sort((a, b) => a.DistanceFromMe - b.DistanceFromMe);
-        this.activeOption = `Distance`;
+    },
+    sortBy(km) {
+      this.activeFilter = km;
+      // Reset to default sortin with province filter, by date
+      if (km === "Date") {
+        console.log(this.$meets);
+        this.meets = this.meets_sorted_by_province;
         this.showDropdown = false;
         return;
       }
-      this.activeOption = `Within ${km} km`;
-      this.showDropdown = false;
+      // Sort by Distance closest to you
+      if (km === "Distance") {
+        this.meets = [...this.meets_sorted_by_province].sort((a, b) => a.DistanceFromMe - b.DistanceFromMe);
+        this.showDropdown = false;
+        return;
+      }
+      // Within x km from you
+      else if (Number.isInteger(km)) {
+        this.activeFilter = km;
+        this.showDropdown = false;
+        this.meets = [...this.meets_sorted_by_province].filter(i => i.DistanceFromMe <= km);
+        return
+      }
       
-      
-      this.meets = [...this.$meets].filter(i => i.DistanceFromMe <= km);
     }
   },
   data() {
     return {
+      provinces: [
+      {en: 'Alberta', fr: 'Alberta'},
+      {en: 'British Columbia', fr: 'Colombie-Britannique'},
+      {en: 'Manitoba', fr: 'Manitoba'},
+      {en: 'New Brunswick', fr: 'Nouveau-Brunswick'},
+      {en: 'Newfoundland and Labrador', fr:'Terre-Neuve-et-Labrador'},
+      {en: 'Northwest Territories', fr: 'Territoires du Nord-Ouest'},
+      {en: 'Nova Scotia', fr: 'Nouvelle-Écosse'},
+      {en: 'Nunavut', fr: 'Nunavut'},
+      {en: 'Ontario', fr: 'Ontario'},
+      {en: 'Prince Edward Island', fr: 'Île-du-Prince-Édouard '},
+      {en: 'Quebec', fr: 'Québec'},
+      {en: 'Saskatchewan', fr: 'Saskatchewan'},
+      {en: 'Yukon', fr: 'Yukon'},
+      {en: 'Canada-Wide', fr: 'À travers le Canada'}
+      ],
       meets: this.$meets,
+      meets_sorted_by_province: this.$meets,
       showDropdown: false,
-      activeOption: "Date",
-      locationCTA: "Please enable location, then click me."
+      showProvDropdown: false,
+      activeProvince: "Ontario",
+      locationCTA: "Please enable location, then click me.",
+      activeFilter: "Date"
     }
   },
   mounted() {
-
+    this.sortByProvince(this.provinces.find(i => i.en === this.your_location.state));
+    console.log(this.your_location)
 
   }
   
@@ -137,20 +207,27 @@ export default {
   // max-width: 1240px;
   max-width: 700px;
 
-  padding: 40px 20px;
+  padding: 100px 20px 40px;
   margin: 40px auto 0;
   //  @media screen and (max-width: 1239px){
   //   max-width: 600px;
   //  }
 }
 .today {
+  width: 100%;
+.small {
+  font-weight: 200;
+  font-size: 14px;
+  width: 50%;
+  display: inline-block;
+ 
+}
   span {
     text-transform: capitalize;
   }
   margin: 0;
-  width: 60%;
   display: inline-block;
-   vertical-align: middle;
+  vertical-align: middle;
   span, img {
     vertical-align: middle;
   }
@@ -225,7 +302,7 @@ h1 {
   position: relative;
   p {
     margin: 0;
-    padding: 10px 0 10px 10px;
+    padding: 10px;
     background: #424242;
     width: calc(100% - 20px);
     display: block;
@@ -236,7 +313,7 @@ h1 {
     position: absolute;
     top: 100%;
     left: 0;
-    z-index: 2;
+    z-index: 5;
     width: 100%;
     margin-top: 0;
     padding: 0;
@@ -256,9 +333,15 @@ h1 {
   }
 }
 
+#currentDate {
+  text-align: right;
+  vertical-align: middle;
+}
+
 .icon {
   width: 20px;
   padding-right: 10px;
+  vertical-align: middle;
 }
 
 .title {
@@ -269,9 +352,9 @@ h1 {
   width: 75%;
 }
 .date {
-  width: 25%;
+  // width: 25%;
   text-align: right;
-  vertical-align: bottom;
+  vertical-align: middle;
   display: inline-block;
 
   p {
@@ -284,10 +367,23 @@ h1 {
     display: inline-block;
     height: 100%;
   }
+  h3 {
+    font-family: "Reservation Wide Blk";
+    font-size: 30px;
+    margin: 0;
+    display: inline-block;
+    height: 100%;
+    color: $highlightcol;
+  }
+  h4 {
+    color: $highlightcol;
+
+  }
 }
 
 .pre-title {
-  color: $highlightcol;
+  // color: $highlightcol;
+  font-size: 20px;
   margin-bottom: 40px;
 }
 .meet_card_inner {
@@ -295,6 +391,9 @@ h1 {
   width: calc( 100% - 40px);
   bottom: 20px;
   z-index: 1;
+  .date {
+    width: 25%;
+  }
 }
 .location {
   color: $highlightcol;
@@ -303,16 +402,24 @@ h1 {
   display: inline-block;
 }
 .select {
- width: 40%;
+  .dropdown-wrapper {
+    display: inline-block;
+    width: calc(50% - 10px);
+    &:first-child {
+      padding-right: 20px;
+    }
+  }
+ width: 100%;
  padding-bottom: 20px;
  vertical-align: middle;
- h3 {
-  padding-bottom: 10px;
+ .label {
+  padding-bottom: 5px;
+  margin: 0;
  }
 }
 .header {
-    width: 100%;
-   margin-bottom: 10px;
+  width: 100%;
+  margin-bottom: 10px;
 }
 .meet_card_link-enter-active {
   transition: all .5s ease;
@@ -327,21 +434,7 @@ h1 {
   min-height: 0;
 }
 
-.small {
-  font-weight: 200;
-  font-size: 14px;
-  h3 {
-    padding-bottom: 10px;
-  }
-  h3 span {
-    // font-family: "Reservation Wide Bd";
-    font-weight: 200;
-    display: inline-block;
-  }
-  span {
-    max-width: calc(100% - 30px);
-  }
-}
+
 .todaymeet {
   &:before {
     content: 'Today!';
@@ -355,8 +448,20 @@ h1 {
     pointer-events: none;
   }
 }
+
 #currentLocation {
+  vertical-align: middle;
   cursor: pointer;
+  img {
+    display: inline-block;
+  }
+  h3 span {
+    font-family: "Reservation Wide Bd";
+    color: $highlightcol;
+    font-size: 20px;
+    width: calc(100% - 30px);
+    display: inline-block;
+  }
 }
 #map { 
   height: 180px;
@@ -366,5 +471,13 @@ h1 {
 }
 .title-section {
   padding-bottom: 30px;
+}
+.provincetitle {
+  padding-top: 20px;
+}
+.fr .todaymeet {
+  &:before {
+    content: 'Aujourd`hui!' !important;
+  }
 }
 </style>
