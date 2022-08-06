@@ -19,6 +19,9 @@ export default new class Airtable {
   }
 
   distance(coords) {
+    if (!store.state.your_location) {
+      return null;
+    }
     return latlng.getDistance([store.state.your_location.lat, store.state.your_location.lon], [coords.lat, coords.lng]);
   }
 
@@ -50,7 +53,7 @@ export default new class Airtable {
   init_airtable2() {
     return new Promise((resolved) => {
       axios.get(url2).then((res) => {
-        console.log(res.data.records[0].fields);
+        // console.log(res.data.records[0].fields);
 
         // French translation
         if (store.state.lang === "fr") {
@@ -127,7 +130,6 @@ export default new class Airtable {
             meets[i]['Today'] = true;
           } 
          
-          console.log();
           counter++;
         }
         

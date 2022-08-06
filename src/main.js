@@ -17,12 +17,11 @@ if (window.location.href.includes("fr.")) {
 store.commit("setLoading", true);
 setTimeout(() => {
   store.commit("setLoading", false);
-}, 1500);
+}, 2000);
 
 function initVue() {
   return new Promise((res) => {
-    Vue.prototype.$geoAPI = geo;
-    Vue.prototype.$geoAPI.init({format: 'json'});
+    
 
       new Vue({
         v_localize,
@@ -33,7 +32,9 @@ function initVue() {
       res();
     })
 }
-Promise.all([airtable.init_airtable(), airtable.init_airtable2()]).then(() => initVue());
+Vue.prototype.$geoAPI = geo;
+Vue.prototype.$geoAPI.init({format: 'json'}).then((Promise.all([airtable.init_airtable(), airtable.init_airtable2()]).then(() => initVue())));
+
   
   
 

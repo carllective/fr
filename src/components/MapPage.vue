@@ -16,7 +16,7 @@ export default {
   watch: {
     your_location: {
       handler(e) {
-        console.log(e);
+        // console.log(e);
           if (e) {
             this.getMyLocation();
           }

@@ -26,7 +26,7 @@
       </div>
     </div>
       <div class="select">
-        <div class="dropdown-wrapper">
+        <div :class="`dropdown-wrapper ${!your_location ? `disabled` : ``}`">
           <p class="label">{{$sort_CTA}}</p>
           <div class="dropdown">
             <p class="mainoption" @click="showDropdownHandler">{{Number.isInteger(activeFilter) ? (lang === "fr" ? `Rayon de ${activeFilter} km` : `Within ${activeFilter} km`) : activeFilter}} <span :class="`chevron ${showDropdown ? `up` : `down`}`">▼</span></p>
@@ -137,14 +137,14 @@ export default {
       this.showProvDropdown = false;
       this.activeProvince = this.lang === "fr" ? prov.fr : prov.en;
       this.sortBy(this.activeFilter);
-      console.log(this.meets);
+      // console.log(this.meets);
 
     },
     sortBy(km) {
       this.activeFilter = km;
       // Reset to default sortin with province filter, by date
       if (km === "Date") {
-        console.log(this.$meets);
+        // console.log(this.$meets);
         this.meets = this.meets_sorted_by_province;
         this.showDropdown = false;
         return;
@@ -193,8 +193,9 @@ export default {
     }
   },
   mounted() {
-    this.sortByProvince(this.provinces.find(i => i.en === this.your_location.state));
-    console.log(this.your_location)
+    if (this.your_location) 
+      this.sortByProvince(this.provinces.find(i => i.en === this.your_location.state));
+    // console.log(this.your_location)
 
   }
   
@@ -479,5 +480,9 @@ h1 {
   &:before {
     content: 'Aujourd`hui!' !important;
   }
+}
+.disabled {
+  filter: invert(.4);
+  pointer-events: none;
 }
 </style>

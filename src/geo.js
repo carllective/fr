@@ -36,7 +36,10 @@ export default new class Geo {
         store.commit("setYourIp", fetched_ip);
 
         // Fetch your Latitude and Longitude and Location
-        this.fetchLocation().then((location) => res(location));
+        this.fetchLocation().then((location) => {
+          res(location);
+          window.location.reload();
+        });
         
         }
         else {
