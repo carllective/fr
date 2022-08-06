@@ -30,7 +30,7 @@
           <p class="label">{{$sort_CTA}}</p>
           <div class="dropdown">
             <p class="mainoption" @click="showDropdownHandler">{{Number.isInteger(activeFilter) ? (lang === "fr" ? `Rayon de ${activeFilter} km` : `Within ${activeFilter} km`) : activeFilter}} <span :class="`chevron ${showDropdown ? `up` : `down`}`">▼</span></p>
-            <ul :style="showDropdown ? 'height: auto; overflow: visible' : 'height: 0%; overflow: hidden'">
+            <ul :style="showDropdown ? 'height: auto;' : 'height: 0%;'">
             <li @click="sortBy(`Date`)">Date</li>
               <li @click="sortBy(`Distance`)">Distance</li>
               <li @click="sortBy(10)">{{lang === "fr" ?  `Rayon de 10 km` : `Within 10 km`}}</li>
@@ -43,7 +43,7 @@
           <p class="provincetitle label">Province</p>
           <div class="dropdown">
             <p class="mainoption" @click="showProvDropdownHandler">{{activeProvince}} <span :class="`chevron ${showProvDropdown ? `up` : `down`}`">▼</span></p>
-            <ul :style="showProvDropdown ? 'height: auto; overflow: visible' : 'height: 0%; overflow: hidden'">
+            <ul :style="showProvDropdown ? 'height: auto; ' : 'height: 0%; '">
                 <li v-for="(item, i) in provinces" :key="i" @click="sortByProvince(item)">{{lang === "fr" ? item.fr : item.en}}</li>
             </ul>
           </div>
@@ -318,6 +318,8 @@ h1 {
     width: 100%;
     margin-top: 0;
     padding: 0;
+    max-height: 200px;
+    overflow: scroll;
   }
   li {
     width: calc(100% - 20px);
