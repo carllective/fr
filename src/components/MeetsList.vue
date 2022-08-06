@@ -34,8 +34,8 @@
             <li @click="sortBy(`Date`)">Date</li>
               <li @click="sortBy(`Distance`)">Distance</li>
               <li @click="sortBy(10)">{{lang === "fr" ?  `Rayon de 10 km` : `Within 10 km`}}</li>
-              <li @click="sortBy(20)">{{lang === "fr" ?  `Rayon de 20 km` : `Within 10 km`}}</li>
-              <li @click="sortBy(50)">{{lang === "fr" ?  `Rayon de 50 km` : `Within 10 km`}}</li>
+              <li @click="sortBy(20)">{{lang === "fr" ?  `Rayon de 20 km` : `Within 20 km`}}</li>
+              <li @click="sortBy(50)">{{lang === "fr" ?  `Rayon de 50 km` : `Within 50 km`}}</li>
             </ul>
           </div>
         </div>
