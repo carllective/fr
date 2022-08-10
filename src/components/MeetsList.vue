@@ -126,10 +126,11 @@ export default {
     },
     sortByProvince(prov) {
        if (prov.en === "Canada-Wide") {
+        console.log(this.$meets);
         this.meets = this.$meets;
         this.showProvDropdown = false;
         this.activeProvince = this.lang === "fr" ? prov.fr : prov.en;
-        this.sortBy(this.activeFilter);
+        // this.sortBy(this.activeFilter);
         return;
       }
       this.meets_sorted_by_province = [...this.$meets].filter(i => i.Province === prov.en);
