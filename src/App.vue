@@ -237,6 +237,9 @@ ul {
   width: 100%;
   height: 100%;
   z-index: 100;
+  opacity: 1;
+  transition: all .5s ease;
+  filter: invert(1);
   .loadingimage {
     position: absolute;
     left: 50%;
@@ -245,11 +248,6 @@ ul {
     width: 20%;
     max-width: 150px;
   }
-}
-.loading {
-  opacity: 1;
-  transition: all .5s ease;
-  filter: invert(1);
 }
 .loading-leave-active {
   opacity: 1;
