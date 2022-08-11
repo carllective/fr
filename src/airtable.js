@@ -109,27 +109,40 @@ export default new class Airtable {
           } else {
             meets[i]['DistanceFromMe'] = this.distance({lat: parseFloat(meets[i]['Lat']), lng: parseFloat(meets[i]['Long'])});
           }
-        
-          // English month
-          if (month_int && store.state.lang !== "fr") 
-            meets[i]['Month'] = this.getMonth(month_int);
-
-          // French month
-          else if (month_int && store.state.lang === "fr")
-            meets[i]['Month'] = this.getMonth_fr(month_int);
 
           if (day_int) 
             meets[i]['Day'] = day_int;
+        
+          // English month and if Today or not
+          if (month_int && store.state.lang !== "fr")  {
+            meets[i]['Month'] = this.getMonth(month_int);
+
+            var parsedDate = new Date().toString().split(" ").splice(0, 4).join(" "); //eg. "Thu Aug 11 2022"
+           // If this meet is today, add an extra property to the array so you can highlight it in the DOM
+            if (parsedDate.includes(`${meets[i]['Month'].substr(0, 3)} ${meets[i]['Day']} ${year_int}`)) {
+              console.log(meets[i].Date, parsedDate.includes(`${meets[i]['Month'].substr(0, 3)} ${meets[i]['Day']} ${year_int}`));
+              meets[i]['Today'] = true;
+            } 
+
+          }
+
+          // French month and if Today or not
+          else if (month_int && store.state.lang === "fr") {
+            meets[i]['Month'] = this.getMonth_fr(month_int);
+
+            var parsedDateFr =  new Date().toLocaleString('fr-FR', {month: "long", day: "2-digit", year: "numeric"}); //eg. "11 août 2022"
+            // If this meet is today, add an extra property to the array so you can highlight it in the DOM
+            if (parsedDateFr.normalize('NFD').replace(/\p{Diacritic}/gu, "") === `${meets[i]['Day']} ${meets[i]['Month']} ${year_int}`.toLowerCase()) {
+              meets[i]['Today'] = true;
+            } 
+
+          }
+            
+          
           if (meets[i].Name) 
             meets[i]['url'] = `${meets[i].Name.toLowerCase().split(" ").join("-")}-${meets[i].Month.toLowerCase()}-${meets[i].Day.toLowerCase()}`;
 
-          // If this meet is today, add an extra property to the array so you can highlight it in the DOM
-          if (new Date().toString().includes(`${meets[i]['Month'].split("").splice(0, 3).join("")} ${meets[i]['Day']} ${year_int}`) ||
-          // in french
-          new Date().toLocaleString('fr-FR', {month: "long", day: "2-digit", year: "numeric"}).localeCompare(`${meets[i]['Day']} ${meets[i]['Month']} ${year_int}`) >= 1) {
-            meets[i]['Today'] = true;
-          } 
-         
+
           counter++;
         }
         

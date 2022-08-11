@@ -64,6 +64,11 @@ export default {
         // Only place markers if they have latitude and longitudes
         if (i.Lat && i.Long) {
 
+          
+          if (i.Today) {
+            console.log(i, i.Today);
+          }
+
           var marker = L.marker([i.Lat, i.Long], {icon: i.Today ? meetsIconToday : meetsIcon}).addTo(this.map)
           .bindPopup(`${i.Today ? `<h3 style="color: red; text-align: center;">TODAY!</h3>` : ``}<h3 style="color: black; margin: 0; text-align: center;">${i.Name}</h3>
           <p style="color: black; margin: 0; text-align: center;">${i.Address}</p>
