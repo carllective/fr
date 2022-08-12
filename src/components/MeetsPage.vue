@@ -3,7 +3,8 @@
     <div class="snapshot">
       <img @click="screenGrab" src="../assets/snapshot.png"/>
     </div>
-    <div class="banner" id="banner" :style="`background-image: url(${info.Image ? info.Image[0].url : ''})`" v-if="info">
+    <div class="banner" id="banner" v-if="info">
+    <img class="banner-image" ref="bannerimage" :src="`${info.Image ? info.Image[0].url : ''})`" :style="resizeImage(info.Image[0])"/>
     <div class="logo">
       <img src="../assets/Icon.png"/>
     </div>
@@ -90,6 +91,23 @@ export default {
       })
       
     },
+    resizeImage(img) {
+      
+      // If landscape, ensure height is 100%, width is full, and image is centered
+      if (img.width > img.height) {
+        var width = (window.innerHeight * .8 / img.height) * img.width;
+        var calc = (window.innerWidth / 2) + ((width / 2) - window.innerWidth);
+        return `position: absolute; 
+              left: -${calc}px;
+              height: 100%;
+          `;
+      }
+      else {
+        return `position: absolute; 
+                height: 100%;
+          `;
+      }
+    },
     screenGrab() {
       var div = document.getElementById('banner');
       htmlToImage.toPng(div)
@@ -144,6 +162,7 @@ export default {
   background-position: center;
   position: relative;
   background-color: black;
+  overflow: hidden;
   &:after {
     content:'';
     position: absolute;
