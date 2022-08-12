@@ -1,11 +1,19 @@
 <template>
   <div id="meetspage">
-    
-    <div class="banner" :style="`background-image: url(${info.Image ? info.Image[0].url : ''})`" v-if="info">
+    <div class="snapshot">
+      <img @click="screenGrab" src="../assets/snapshot.png"/>
+    </div>
+    <div class="banner" id="banner" :style="`background-image: url(${info.Image ? info.Image[0].url : ''})`" v-if="info">
+    <div class="logo">
+      <img src="../assets/Icon.png"/>
+    </div>
       <div class="info">
         <div class="title">
           <h1 v-if="info.Name">{{info.Name}}</h1>
-          <h3 class="location" v-if="info.Town">{{info.Town}}, {{info.Province}}</h3>
+        </div>
+        <div class="location">
+          <p class="addy" v-if="info.Address">{{info.Address}}</p>
+          <h3 v-if="info.Town">{{info.Town}}, {{info.Province}}</h3>
         </div>
         <div class="date">
           <span v-if="lang === 'en'">
@@ -16,25 +24,15 @@
             <h3 class="day" v-if="info.Day">{{info.Day}}</h3>
             <h4 class="month" v-if="info.Month">{{info.Month}}</h4>
         </span>
+         <p class="time">{{info.Time}}</p>
         </div>
       </div>
     </div>
     <div class="page-wrapper">
-    <div id="map"></div>
+        <div id="map"></div>
 
     <div class="page"  v-if="info">
-      <table class="pageinfo">
-        <tr>
-          <td v-if="info.Address">
-            <h2>Location</h2>
-            <p>{{info.Address}}</p>
-          </td>
-          <td v-if="info.Time">
-            <h2>{{lang === "en" ? "Time" : "Heure"}}</h2>
-            <p>{{info.Time}}</p>
-          </td>
-        </tr>
-      </table>
+    
       <div v-if="info.Info">
        <h2>{{lang === "en" ? "Details" : "Détails"}}</h2>
         <p v-html="parsedInfo(info.Info)"></p>
@@ -42,7 +40,7 @@
         <div class="ctas">
           <a class="button" target="_blank" v-if="info.Calendar_Link" :href="info.Calendar_Link">{{lang === "en" ? "Save To Calendar" : "Télécharger dans le Calendrier"}}</a>
           <a class="button" target="_blank" v-if="info.Website_Link" :href="info.Website_Link">{{lang === "en" ? "Visit Website" : "Consulter le Site-web"}}</a>
-          <a class="button fullwidth" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Buy Tickets" : "Acheter des Billets"}}</a>
+          <a class="button" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Buy Tickets" : "Acheter des Billets"}}</a>
         </div>
     </div>
     </div>
@@ -50,9 +48,11 @@
 </template>
 
 <script>
+import * as htmlToImage from 'html-to-image';
+// import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
 import {mapState} from "vuex";
 var L = require('leaflet');
-
+var download = require("downloadjs");
 export default {
   name: 'MeetsPage',
   components: {
@@ -90,14 +90,23 @@ export default {
       })
       
     },
+    screenGrab() {
+      var div = document.getElementById('banner');
+      htmlToImage.toPng(div)
+        .then(function (dataUrl) {
+        console.log(dataUrl);
+        download(dataUrl);
+      });
+    }
   },
   data() {
     return {
       info:null,
-      map: null
+      map: null,
     }
   },
   mounted() {
+    window.scrollTo(0, 0);
     new Promise((res) => {
       try {
         this.info = this.$meets.filter(i => `/${i.url}` === window.location.pathname)[0];
@@ -129,11 +138,12 @@ export default {
   }
 }
 .banner {
-  height: 50vh;
-    background-size: cover;
+  height: 80vh;
+  background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   position: relative;
+  background-color: black;
   &:after {
     content:'';
     position: absolute;
@@ -147,8 +157,9 @@ export default {
     pointer-events: none;
   }
 }
-.title, .date {
+.title, .date, .location {
   display: inline-block;
+  vertical-align: middle;
 }
 
 .title {
@@ -158,10 +169,24 @@ export default {
 .date {
   text-align: right;
   right: 20px;
-  position: absolute;
+  // position: absolute;
   bottom: 20px;
   z-index: 1;
+  width: calc(30% - 20px);
 }
+.location {
+  width: calc(70% - 40px);
+  margin: 0 20px;
+}
+.addy {
+  margin-top: 0;
+}
+
+.time {
+  margin-bottom: 0;
+  color: $highlightcol;
+}
+
 .info {
   position: absolute;
   bottom: 0;
@@ -236,5 +261,27 @@ export default {
 #map, .page {
   vertical-align: middle;
 }
-
+#canvas {
+  width: 100%;
+  background: black;
+  // min-height: 80vh;
+}
+#banner {
+}
+.snapshot {
+  position: absolute;
+  z-index: 2;
+  top: 180px;
+  right: 20px;
+  cursor: pointer;
+  img {
+    width: 50px;
+  }
+}
+.logo img {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  width: 60px;
+}
 </style>

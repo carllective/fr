@@ -120,7 +120,7 @@ export default new class Airtable {
             var parsedDate = new Date().toString().split(" ").splice(0, 4).join(" "); //eg. "Thu Aug 11 2022"
            // If this meet is today, add an extra property to the array so you can highlight it in the DOM
             if (parsedDate.includes(`${meets[i]['Month'].substr(0, 3)} ${meets[i]['Day']} ${year_int}`)) {
-              console.log(meets[i].Date, parsedDate.includes(`${meets[i]['Month'].substr(0, 3)} ${meets[i]['Day']} ${year_int}`));
+              // console.log(meets[i].Date, parsedDate.includes(`${meets[i]['Month'].substr(0, 3)} ${meets[i]['Day']} ${year_int}`));
               meets[i]['Today'] = true;
             } 
 
