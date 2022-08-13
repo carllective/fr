@@ -102,7 +102,7 @@ export default {
 <style lang="scss">
 @import "./styles.scss";
 
-body {
+body, html {
   margin: 0;
   overscroll-behavior: none;
   overflow-x: hidden;

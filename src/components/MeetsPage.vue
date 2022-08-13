@@ -4,7 +4,9 @@
       <img @click="screenGrab" src="../assets/snapshot.png"/>
     </div>
     <div class="banner" id="banner" v-if="info">
-    <img class="banner-image" ref="bannerimage" :src="`${info.Image ? info.Image[0].url : ''})`" :style="resizeImage(info.Image[0])"/>
+    <div class="banner-image-wrapper" ref="bannerimagewrapper" id="bannerimagewrapper">
+      <img class="banner-image" ref="bannerimage" id="bannerimage" :src="`${info.Image ? info.Image[0].url : ''})`" />
+    </div>
     <div class="logo">
       <img src="../assets/Icon.png"/>
     </div>
@@ -92,47 +94,79 @@ export default {
       
     },
     resizeImage(img) {
-      
-      // If landscape, ensure height is 100%, width is full, and image is centered
-      if (img.width > img.height) {
-        var width = (window.innerHeight * .8 / img.height) * img.width;
-        var calc = (window.innerWidth / 2) + ((width / 2) - window.innerWidth);
-        return `position: absolute; 
-              left: -${calc}px;
-              height: 100%;
+      const defaults = `position: absolute;
+            display: block;
+            left: 50%;
+            top: 50%;
+            transform: translateY(-50%)  translateX(-50%);`;
+
+            // bannerimagewrapper height
+            //image height
+            var calculatedWidth = window.innerWidth / this.info.Image[0].width * this.info.Image[0].height;
+            var bannerWrapperHeight = document.getElementById("bannerimagewrapper").getBoundingClientRect().height;
+            // console.log(bannerWrapperHeight, calculatedWidth);
+
+      if (img.width > img.height || calculatedWidth < bannerWrapperHeight) {
+        document.getElementById("bannerimage").style = `
+          height: 100%;
+          ${defaults}
           `;
-      }
-      else {
-        return `position: absolute; 
-                height: 100%;
-          `;
+      } else {
+        // this.resizeBannerImageWrapper();
+        document.getElementById("bannerimage").style =  `
+          width: 100%;
+          ${defaults}
+        `;
       }
     },
+    // resizeBannerImageWrapper() {
+    //   this.$nextTick(() => {
+    //     console.log(this.info.Image[0].width < this.info.Image[0].height);
+    //     if (this.$refs.bannerimage && this.$refs.bannerimagewrapper) {
+    //       if (this.$refs.bannerimage.getBoundingClientRect().height < window.innerHeight * .8 && (this.info.Image[0].width < this.info.Image[0].height)) {
+    //         this.$refs.bannerimagewrapper.style.height = `${(window.innerWidth / this.info.Image[0].width) * this.info.Image[0].height}px`;
+    //       } else {
+    //         this.$refs.bannerimagewrapper.style.height = `100%;`;
+    //       }
+    //     }
+    //   })
+    // },
     screenGrab() {
       var div = document.getElementById('banner');
       htmlToImage.toPng(div)
         .then(function (dataUrl) {
-        console.log(dataUrl);
         download(dataUrl);
       });
     }
   },
+
   data() {
     return {
       info:null,
       map: null,
     }
   },
+  beforeDestroy() {
+    window.removeEventListener("resize", () => this.resizeImage(this.info.Image[0]));
+  },
   mounted() {
+    
     window.scrollTo(0, 0);
     new Promise((res) => {
       try {
         this.info = this.$meets.filter(i => `/${i.url}` === window.location.pathname)[0];
         res(this.info);
+        
       } catch {
         window.location.href = "/";
       }
-    }).then(() => this.renderMap());
+    }).then(() =>{
+      this.renderMap();
+      this.$nextTick(() => {
+        this.resizeImage(this.info.Image[0]);
+        window.addEventListener("resize", () => this.resizeImage(this.info.Image[0]));
+      })
+    });
   }
   
 }
@@ -143,6 +177,8 @@ export default {
 #meetspage {
   min-height: 100vh;
   background: white;
+  overscroll-behavior: none;
+  overflow-x: hidden;
 }
 .page {
   padding: 60px 20px;
@@ -163,18 +199,18 @@ export default {
   position: relative;
   background-color: black;
   overflow: hidden;
-  &:after {
-    content:'';
-    position: absolute;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    background: rgb(30,30,30);
-    background: linear-gradient(0deg, rgba(30,30,30,0.8856136204481793) 0%, rgba(20,20,20,0.6167060574229692) 47%, rgba(0,0,0,0) 100%);
-    z-index: 0;
-    pointer-events: none;
-  }
+    &:after {
+      content:'';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 100%;
+      height: 60%;
+      background: rgb(0,0,0);
+      background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(20,20,20,0.6167060574229692) 47%, rgba(0,0,0,0) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
 }
 .title, .date, .location {
   display: inline-block;
@@ -302,5 +338,23 @@ export default {
   top: 20px;
   left: 20px;
   width: 60px;
+}
+.banner-image-wrapper {
+  height: 100%;
+  position: relative;
+  img {
+      &:after {
+      content:'';
+      position: absolute;
+      left: 0;
+      bottom: -1px;
+      width: 100%;
+      height: 60%;
+      background: rgb(0,0,0);
+      background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(20,20,20,0.6167060574229692) 47%, rgba(0,0,0,0) 100%);
+      z-index: 0;
+      pointer-events: none;
+    }
+  }
 }
 </style>
