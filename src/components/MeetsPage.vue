@@ -1,19 +1,19 @@
 
 <template>
   <div id="meetspage">
-    <!-- <div class="snapshot">
-      <a @click="screenGrab">
-      <img  src="../assets/snapshot.png"/> <p>Hold to Save Image</p>
+    <div class="snapshot">
+      <a @click="isolate(`prompt`)">
+      <img  src="../assets/snapshot.png"/> <p>Fullscreen Banner</p>
       </a>
-    </div> -->
-    <div class="banner" id="banner" v-if="info">
+    </div>
+    <div class="banner" id="banner" v-if="info" @click="isolate(``)">
     <div class="banner-image-wrapper" ref="bannerimagewrapper" id="bannerimagewrapper">
       <img class="banner-image" ref="bannerimage" id="bannerimage" :src="`${info.Image ? info.Image[0].url : ''})`" />
     </div>
     <div class="logo">
       <img src="../assets/Icon.png"/>
     </div>
-      <div class="info">
+      <div class="info" id="info">
         <div class="title">
           <h1 v-if="info.Name">{{info.Name}}</h1>
         </div>
@@ -99,6 +99,33 @@ export default {
       })
       
     },
+    isolate(opt) {
+      if (opt === `prompt`) {
+        this.isolated = true;
+      } else {
+        this.isolated = false;
+      }
+      if (this.isolated) {
+        document.getElementById("banner").style = `
+          position: fixed;
+          top: 0;
+          width: 100%;
+          z-index: 100;
+          height: 100%;
+          margin-bottom: 100px;
+          cursor: pointer;
+      `;
+      document.getElementById("info").style = `
+          padding-bottom: 50px;
+      `
+      } else {
+         document.getElementById("banner").style = ``;
+         document.getElementById("info").style = `
+          padding-bottom: 20px;
+      `
+      }
+  
+    },
     resizeImage(img) {
       const defaults = `position: absolute;
             display: block;
@@ -143,13 +170,15 @@ export default {
     return {
       info:null,
       map: null,
-      dataUrl: ``
+      dataUrl: ``,
+      isolated: false
     }
   },
   beforeDestroy() {
     window.removeEventListener("resize", () => this.resizeImage(this.info.Image[0]));
   },
   mounted() {
+    // document.webkitCancelFullScreen();
     window.scrollTo(0, 0);
     new Promise((res) => {
       try {
