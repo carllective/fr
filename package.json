@@ -10,8 +10,11 @@
   "dependencies": {
     "airtable": "^0.11.4",
     "core-js": "^3.8.3",
+    "dom-to-image": "^2.6.0",
     "downloadjs": "^1.4.7",
+    "file-saver": "^2.0.5",
     "html-to-image": "^1.10.0",
+    "html2canvas": "^1.4.1",
     "leaflet": "^1.8.0",
     "leaflet-map": "^0.2.1",
     "url": "^0.11.0",

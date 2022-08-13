@@ -1,8 +1,11 @@
+
 <template>
   <div id="meetspage">
-    <div class="snapshot">
-      <img @click="screenGrab" src="../assets/snapshot.png"/>
-    </div>
+    <!-- <div class="snapshot">
+      <a @click="screenGrab">
+      <img  src="../assets/snapshot.png"/> <p>Hold to Save Image</p>
+      </a>
+    </div> -->
     <div class="banner" id="banner" v-if="info">
     <div class="banner-image-wrapper" ref="bannerimagewrapper" id="bannerimagewrapper">
       <img class="banner-image" ref="bannerimage" id="bannerimage" :src="`${info.Image ? info.Image[0].url : ''})`" />
@@ -31,6 +34,8 @@
         </div>
       </div>
     </div>
+    <img :src="dataUrl" v-if="dataUrl"/>
+
     <div class="page-wrapper">
         <div id="map"></div>
 
@@ -51,8 +56,9 @@
 </template>
 
 <script>
+/* eslint-disable no-unused-vars */
 import * as htmlToImage from 'html-to-image';
-// import { toPng, toJpeg, toBlob, toPixelData, toSvg } from 'html-to-image';
+import domtoimage from "dom-to-image";
 import {mapState} from "vuex";
 var L = require('leaflet');
 var download = require("downloadjs");
@@ -119,24 +125,17 @@ export default {
         `;
       }
     },
-    // resizeBannerImageWrapper() {
-    //   this.$nextTick(() => {
-    //     console.log(this.info.Image[0].width < this.info.Image[0].height);
-    //     if (this.$refs.bannerimage && this.$refs.bannerimagewrapper) {
-    //       if (this.$refs.bannerimage.getBoundingClientRect().height < window.innerHeight * .8 && (this.info.Image[0].width < this.info.Image[0].height)) {
-    //         this.$refs.bannerimagewrapper.style.height = `${(window.innerWidth / this.info.Image[0].width) * this.info.Image[0].height}px`;
-    //       } else {
-    //         this.$refs.bannerimagewrapper.style.height = `100%;`;
-    //       }
-    //     }
-    //   })
-    // },
+
     screenGrab() {
+      console.log(this.info.id);
       var div = document.getElementById('banner');
       htmlToImage.toPng(div)
-        .then(function (dataUrl) {
-        download(dataUrl);
-      });
+        .then((dataUrl) => {
+          console.log(dataUrl);
+        // download(dataUrl);
+        }, err => {
+          console.warn(err);
+        });
     }
   },
 
@@ -144,13 +143,13 @@ export default {
     return {
       info:null,
       map: null,
+      dataUrl: ``
     }
   },
   beforeDestroy() {
     window.removeEventListener("resize", () => this.resizeImage(this.info.Image[0]));
   },
   mounted() {
-    
     window.scrollTo(0, 0);
     new Promise((res) => {
       try {
@@ -321,16 +320,26 @@ export default {
   background: black;
   // min-height: 80vh;
 }
-#banner {
-}
+// #banner {
+//   width: 600px;
+// }
 .snapshot {
   position: absolute;
   z-index: 2;
   top: 180px;
   right: 20px;
+  padding-right: 10px;
+  border-radius: 100px;
+  background: black;
   cursor: pointer;
   img {
-    width: 50px;
+    width: 25px;
+  }
+  img, p {
+    display: inline-block;
+    margin: 0;
+    vertical-align: middle;
+    font-size: 10px;
   }
 }
 .logo img {
