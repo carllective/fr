@@ -64,7 +64,7 @@ export default new class Geo {
           // Set your location
           store.commit("setYourLocation", location.data.features[0].properties);
           console.log(location.data.features[0].properties.state)
-          store.commit("setActiveProvince",location.data.features[0].properties.state);
+          store.commit("setActiveProvince", {en: location.data.features[0].properties.state, fr: location.data.features[0].properties.state});
           // Return promise.
           res(location.data.features[0].properties);
 
