@@ -10,7 +10,7 @@ export default new Vuex.Store({
     loading: true,
     lang: "en",
     activeFilter: "Date",
-    activeProvince: "Ontario",
+    activeProvince: {en: 'Ontario', fr: 'Ontario'},
     scrollY: 0
   },
 
@@ -47,6 +47,9 @@ export default new Vuex.Store({
     },
     setLang(context, lang) {
       context.commit("setLang", lang);
+    },
+    setActiveProvince(context, activeProvince) {
+      context.commit("setActiveProvince", activeProvince);
     },
   },
   plugins: [createPersistedState()],
