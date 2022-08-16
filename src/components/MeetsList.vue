@@ -42,7 +42,7 @@
         <div class="dropdown-wrapper">
           <p class="provincetitle label">Province</p>
           <div class="dropdown">
-            <p class="mainoption" @click="showProvDropdownHandler">{{activeProvince}} <span :class="`chevron ${showProvDropdown ? `up` : `down`}`">▼</span></p>
+            <p class="mainoption" @click="showProvDropdownHandler">{{lang === "fr" ? activeProvince.fr : activeProvince.en}} <span :class="`chevron ${showProvDropdown ? `up` : `down`}`">▼</span></p>
             <ul :style="showProvDropdown ? 'height: auto; ' : 'height: 0%; '">
                 <li v-for="(item, i) in provinces" :key="i" @click="sortByProvince(item)">{{lang === "fr" ? item.fr : item.en}}</li>
             </ul>
@@ -87,9 +87,17 @@ export default {
   components: {
   },
   watch: {
+    scroll() {
+      this.$store.commit("setScrollY", window.scrollY);
+    }
+  },
+  props: {
+    scroll: {
+      type: Event
+    }
   },
   computed: {
-    ...mapState(["your_location", "lang"])
+    ...mapState(["your_location", "lang", "activeFilter", "activeProvince", "scrollY"])
   },
   methods: {
     requestLocation() {
@@ -126,24 +134,24 @@ export default {
     },
     sortByProvince(prov) {
        if (prov.en === "Canada-Wide") {
-        console.log(this.$meets);
         this.meets = [...this.$meets];
         this.meets_sorted_by_province = [...this.$meets];
         this.showProvDropdown = false;
-        this.activeProvince = this.lang === "fr" ? prov.fr : prov.en;
+        this.$store.commit("setActiveProvince",  prov);
         this.sortBy(this.activeFilter);
         return;
       }
       this.meets_sorted_by_province = [...this.$meets].filter(i => i.Province === prov.en);
       this.meets = this.meets_sorted_by_province;
       this.showProvDropdown = false;
-      this.activeProvince = this.lang === "fr" ? prov.fr : prov.en;
+      this.$store.commit("setActiveProvince",  prov);
       this.sortBy(this.activeFilter);
       // console.log(this.meets);
 
     },
     sortBy(km) {
-      this.activeFilter = km;
+      // this.activeFilter = km;
+      this.$store.commit("setActiveFilter", km);
       // Reset to default sortin with province filter, by date
       if (km === "Date") {
         
@@ -159,7 +167,8 @@ export default {
       }
       // Within x km from you
       else if (Number.isInteger(km)) {
-        this.activeFilter = km;
+        // this.activeFilter = km;
+      this.$store.commit("setActiveFilter", km);
         this.showDropdown = false;
         this.meets = [...this.meets_sorted_by_province].filter(i => i.DistanceFromMe <= km);
         return
@@ -189,16 +198,20 @@ export default {
       meets_sorted_by_province: this.$meets,
       showDropdown: false,
       showProvDropdown: false,
-      activeProvince: "Ontario",
       locationCTA: "Please enable location, then click me.",
-      activeFilter: "Date"
     }
   },
   mounted() {
-    if (this.your_location) 
-      this.sortByProvince(this.provinces.find(i => i.en === this.your_location.state));
-    // console.log(this.your_location)
+    // if (this.your_location) 
+    //   this.sortByProvince(this.provinces.find(i => i.en === this.your_location.state));
 
+    if (this.activeProvince === undefined) {
+       this.$store.commit("setActiveProvince", {en: 'Ontario', fr: 'Ontario'});
+    } else {
+      this.$store.commit("setActiveProvince", this.activeProvince);
+    }
+    this.sortByProvince(this.activeProvince);
+    window.scrollTo(0, this.scrollY);
   }
   
 }

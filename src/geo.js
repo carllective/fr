@@ -3,8 +3,12 @@ var axios = require('axios');
 // import Vue from "vue";
 import store from "./store.js";
 
+
+
 export default new class Geo {
   constructor() {
+    
+    
   }
 
   async init() {
@@ -23,8 +27,8 @@ export default new class Geo {
             typeof store.state.your_location.country === 'string',
           ]
         }
-        
 
+        // console.log(store.state.your_location.state);
         // If cookie hasn't stored your location (ie. first time logging in),
         // OR your IP address changes, 
         // OR the location data is gibbberish (can happen if I push changes and user ahsn't refreshed cookies),
@@ -59,6 +63,8 @@ export default new class Geo {
           console.log("making API call");
           // Set your location
           store.commit("setYourLocation", location.data.features[0].properties);
+          console.log(location.data.features[0].properties.state)
+          store.commit("setActiveProvince",location.data.features[0].properties.state);
           // Return promise.
           res(location.data.features[0].properties);
 

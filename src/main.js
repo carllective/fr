@@ -4,8 +4,6 @@ import airtable from './airtable';
 import geo from './geo';
 import store from './store';
 import router from './router';
-import localize from './localize';
-let v_localize = localize.localize;
 Vue.config.productionTip = false;
 
 if (window.location.href.includes("fr.")) {
@@ -24,7 +22,6 @@ function initVue() {
     
 
       new Vue({
-        v_localize,
         store,
         router,
         render: h => h(App),

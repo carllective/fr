@@ -42,7 +42,7 @@
       </ul>
       
     </div>
-    <router-view class="view"></router-view>
+    <router-view :scroll="scroll" class="view"></router-view>
 
     <FooterArea/>
     <div class="mobile_logobar">
@@ -89,10 +89,13 @@ export default {
   },
   data() {
     return {
-
+      scroll: null
     }
   },
   mounted() {
+    window.addEventListener("scroll", (e) => {
+      this.scroll = e;
+    })
 
   }
   

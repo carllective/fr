@@ -8,7 +8,10 @@ export default new Vuex.Store({
     your_location: null,
     your_ip: null,
     loading: true,
-    lang: "en"
+    lang: "en",
+    activeFilter: "Date",
+    activeProvince: "Ontario",
+    scrollY: 0
   },
 
   mutations: {
@@ -23,6 +26,15 @@ export default new Vuex.Store({
     },
     setLang(state, lang) {
       Vue.set(state, "lang", lang);
+    },
+    setActiveFilter(state, activeFilter) {
+      Vue.set(state, "activeFilter", activeFilter);
+    },
+    setActiveProvince(state, activeProvince) {
+      Vue.set(state, "activeProvince", activeProvince);
+    },
+    setScrollY(state, scrollY) {
+      Vue.set(state, "scrollY", scrollY);
     },
   },
 
