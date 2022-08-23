@@ -175,7 +175,7 @@ export default {
     }
   },
   beforeDestroy() {
-    window.removeEventListener("resize", () => this.resizeImage(this.info.Image[0]));
+    // window.removeEventListener("resize", () => this.resizeImage(this.info.Image[0]));
   },
   mounted() {
     // document.webkitCancelFullScreen();
@@ -191,7 +191,7 @@ export default {
     }).then(() =>{
       this.renderMap();
       this.$nextTick(() => {
-        this.resizeImage(this.info.Image[0]);
+        // this.resizeImage(this.info.Image[0]);
         window.addEventListener("resize", () => this.resizeImage(this.info.Image[0]));
       })
     });

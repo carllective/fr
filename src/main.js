@@ -4,7 +4,9 @@ import airtable from './airtable';
 import geo from './geo';
 import store from './store';
 import router from './router';
+import VueHead from 'vue-head';
 Vue.config.productionTip = false;
+Vue.use(VueHead);
 
 if (window.location.href.includes("fr.")) {
   store.commit("setLang", "fr");
@@ -19,8 +21,6 @@ setTimeout(() => {
 
 function initVue() {
   return new Promise((res) => {
-    
-
       new Vue({
         store,
         router,

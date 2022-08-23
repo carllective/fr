@@ -81,11 +81,58 @@ export default {
   watch: {
 
   },
+
   computed: {
     ...mapState(["loading", "lang"])
   },
   methods: {
-  
+  },
+  head: {
+    title: {
+      inner: 'Carllective',
+      separator: '-',
+      complement: 'Car Meets All Across Canada'
+    },
+    // Meta tags
+    meta: [
+      { name: 'application-name', content: 'Carllective' },
+      { name: 'description', content: 'Carllective informs of the latest Car Meets across Canada, and all things automotive.', id: 'desc' }, // id to replace intead of create element
+      // ...
+      // Twitter
+      { name: 'twitter:title', content: 'Carllective' },
+      // with shorthand
+      { n: 'twitter:description', c: 'Carllective informs of the latest Car Meets across Canada, and all things automotive.'},
+      // ...
+      // Google+ / Schema.org
+      { itemprop: 'name', content: 'Carllective' },
+      { itemprop: 'description', content: 'Carllective informs of the latest Car Meets across Canada, and all things automotive.' },
+      // ...
+      // Facebook / Open Graph
+      { property: 'fb:app_id', content: 'Carllective' },
+      { property: 'og:title', content: 'Carllective – Canadian Car Meets' },
+      // with shorthand
+      { p: 'og:image', c: "https://dl.airtable.com/.attachments/734839087349eee4e97c4c8a4acc0b56/4afa3841/carllective-banner.png" },
+      // ...
+    ],
+    // link tags
+    // link: [
+    //   // { rel: 'canonical', href: 'http://example.com/#!/contact/', id: 'canonical' },
+    //   // { rel: 'author', href: 'author', undo: false }, // undo property - not to remove the element
+    //   // { rel: 'icon', href: require('./path/to/icon-16.png'), sizes: '16x16', type: 'image/png' }, 
+    //   // with shorthand
+    //   // { r: 'icon', h: 'path/to/icon-32.png', sz: '32x32', t: 'image/png' },
+    //   // ...
+    // ],
+    script: [
+      // { type: 'text/javascript', src: 'cdn/to/script.js', async: true, body: true}, // Insert in body
+      // with shorthand
+      { t: 'application/ld+json', i: '{ "@context": "http://schema.org" }' },
+      // ...
+    ],
+    // style: [
+    //   { type: 'text/css', inner: 'body { background-color: #000; color: #fff}', undo: false },
+    //   // ...
+    // ]
   },
   data() {
     return {
@@ -96,7 +143,6 @@ export default {
     window.addEventListener("scroll", (e) => {
       this.scroll = e;
     })
-
   }
   
 }
