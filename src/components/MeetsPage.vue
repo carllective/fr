@@ -380,6 +380,9 @@ export default {
 .banner-image-wrapper {
   height: 100%;
   position: relative;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   img {
       &:after {
       content:'';
