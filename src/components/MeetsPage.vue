@@ -7,8 +7,8 @@
       </a>
     </div>
     <div class="banner" id="banner" v-if="info" @click="isolate(``)">
-    <div class="banner-image-wrapper" ref="bannerimagewrapper" id="bannerimagewrapper">
-      <img class="banner-image" ref="bannerimage" id="bannerimage" :src="`${info.Image ? info.Image[0].url : ''})`" />
+    <div class="banner-image-wrapper" ref="bannerimagewrapper" id="bannerimagewrapper" :style="`background-image: url(${info.Image ? info.Image[0].url : ''});`">
+      <!-- <img class="banner-image" ref="bannerimage" id="bannerimage" :src="`${info.Image ? info.Image[0].url : ''})`" /> -->
     </div>
     <div class="logo">
       <img src="../assets/Icon.png"/>
