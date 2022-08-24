@@ -85,7 +85,7 @@ export default {
             center: [this.info.Lat , this.info.Long],
             zoom: 12
         });
-        L.tileLayer('https://api.maptiler.com/maps/voyager/{z}/{x}/{y}.png?key=UhqYthhZlPgjJOmBxOln', {attribution: '<a href="https://carto.com/" target="_blank">&copy; CARTO</a> <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'}).addTo(this.map);
+        L.tileLayer('https://a.tile.openstreetmap.fr/hot/{z}/{x}/{y}.png', {attribution: '<a href="https://carto.com/" target="_blank">&copy; CARTO</a> <a href="https://www.maptiler.com/copyright/" target="_blank">&copy; MapTiler</a> <a href="https://www.openstreetmap.org/copyright" target="_blank">&copy; OpenStreetMap contributors</a>'}).addTo(this.map);
         
         var meetsIconToday = L.icon({
           iconUrl: require('../assets/C_Map_Marker_Car_Meets_TODAY.png'),
