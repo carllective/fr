@@ -8,14 +8,14 @@
       <div class="today">
         <div class="small" id="currentLocation" @click="location() === locationCTA ? requestLocation() : null">
           <h3>
-            <img class="icon" src="../assets/white/Location.svg"/>
+            <img class="icon" alt="Location icon" src="../assets/white/Location.svg"/>
             <span v-html="location()"></span>
           </h3>
         </div>
 
         <div class="small" id="currentDate">
         <h3>
-          <img class="icon" src="../assets/white/Calendar.svg"/>
+          <img class="icon" alt="Calendar icon" src="../assets/white/Calendar.svg"/>
           <div class="date">
             <span>
               <h4>{{todaysDate("month")}}</h4>
