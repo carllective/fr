@@ -84,8 +84,10 @@ export default new class Airtable {
         var meets = res.data.records.map(i => {
           return {...i.fields, id: i.id};
         })
-        // Hide the "Hidden" ones
+        // Hide past ones by date
         .filter((i => parseInt(i.Date.split("-").join("")) >= this.numericDate()))
+        // Hide the "Hidden" ones
+        .filter(i => i.Hidden !== true)
         // Sort in order by Date
         .sort((a, b) => parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join("")));
         console.log(meets, this.numericDate(), parseInt(meets[0].Date.split("-").join("")));
