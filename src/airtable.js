@@ -90,7 +90,6 @@ export default new class Airtable {
         .filter(i => i.Hidden !== true)
         // Sort in order by Date
         .sort((a, b) => parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join("")));
-        console.log(meets, this.numericDate(), parseInt(meets[0].Date.split("-").join("")));
         var counter = 0;
 
         for (let i = 0; i < meets.length; i++) {
@@ -159,7 +158,6 @@ export default new class Airtable {
   }
 
   numericDate() {
-    console.log(new Date().getMonth() + 1);
     return parseInt(`${new Date().getFullYear()}${("0" + (new Date().getMonth() + 1)).slice(-2)}${("0" + new Date().getDate()).slice(-2)}`);
   }
 

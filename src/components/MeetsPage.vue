@@ -14,6 +14,15 @@
       <img src="../assets/Icon.png"/>
     </div>
       <div class="info" id="info">
+        <div class="instagrams" v-if="instagrams.length">
+          <transition v-for="(item, i) in instagrams" :key="i">
+            <a :href="instagramsLink(item)" target="_blank">
+              <small v-html="item"></small>
+            </a>
+          </transition>
+        </div>
+        
+        <br/>
         <div class="title">
           <h1 v-if="info.Name">{{info.Name}}</h1>
         </div>
@@ -153,6 +162,15 @@ export default {
       }
     },
 
+    instagramsLink(item) {
+      if (item.includes("@")) {
+        return `https://www.instagram.com/${item.split("@")[1]}`;
+      }
+      else if (item.includes("#")) {
+        return `https://www.instagram.com/explore/tags/${item.split("#")[1]}`;
+      }
+    },
+
     screenGrab() {
       console.log(this.info.id);
       var div = document.getElementById('banner');
@@ -171,7 +189,8 @@ export default {
       info:null,
       map: null,
       dataUrl: ``,
-      isolated: false
+      isolated: false,
+      instagrams: []
     }
   },
   beforeDestroy() {
@@ -184,7 +203,9 @@ export default {
       try {
         this.info = this.$meets.filter(i => `/${i.url}` === window.location.pathname)[0];
         res(this.info);
-        
+        if (this.info.Instagram) {
+          this.instagrams = this.info.Instagram.split("\n");
+        }
       } catch {
         window.location.href = "/";
       }
@@ -343,6 +364,16 @@ export default {
 }
 #map, .page {
   vertical-align: middle;
+}
+small {
+  margin-left: 20px;
+  display: inline-block;
+  font-size: 14px;
+  font-family: Helvetica;
+  color: black;
+  background: white;
+  padding: 10px;
+  border-radius: 100px;
 }
 #canvas {
   width: 100%;
