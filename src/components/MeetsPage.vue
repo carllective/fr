@@ -200,7 +200,7 @@ export default {
     // document.webkitCancelFullScreen();
     window.scrollTo(0, 0);
     new Promise((res) => {
-      // try {
+      try {
         this.info = this.$meets.filter(i => `/${i.url}` === window.location.pathname)[0];
         console.log(this.info.Instagram);
         res(this.info);
@@ -208,9 +208,9 @@ export default {
           // this.instagrams = this.info.Instagram.split("\n");
           this.instagrams = this.info.Instagram;
         }
-      // } catch {
-      //   window.location.href = "/";
-      // }
+      } catch {
+        window.location.href = "/";
+      }
     }).then(() =>{
       this.renderMap();
       this.$nextTick(() => {
