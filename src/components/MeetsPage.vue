@@ -202,7 +202,7 @@ export default {
     new Promise((res) => {
       try {
         this.info = this.$meets.filter(i => `/${i.url}` === window.location.pathname)[0];
-        console.log(this.info.Instagram);
+
         res(this.info);
         if (this.info.Instagram) {
           // this.instagrams = this.info.Instagram.split("\n");
