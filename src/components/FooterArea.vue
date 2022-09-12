@@ -43,7 +43,8 @@ export default {
 @import "../styles.scss";
 #footer {
   min-height: 10vh;
-  background: #2F2F2F;
+  // background: #2F2F2F;
+  background: black;
   position: relative;
   padding: 20px 20px;
   .signup {

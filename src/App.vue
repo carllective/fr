@@ -127,7 +127,8 @@ body, html {
 }
 .logobar {
   position: fixed;
-  background: #2F2F2F;
+  // background: #2F2F2F;
+  background: black;
   padding: 2vh 0;
   width: 100%;
   top: 0;

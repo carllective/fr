@@ -57,7 +57,7 @@
         <div class="ctas">
           <a class="button" target="_blank" v-if="info.Calendar_Link" :href="info.Calendar_Link">{{lang === "en" ? "Save To Calendar" : "Télécharger dans le Calendrier"}}</a>
           <a class="button" target="_blank" v-if="info.Website_Link" :href="info.Website_Link">{{lang === "en" ? "Visit Website" : "Consulter le Site-web"}}</a>
-          <a class="button" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Buy Tickets" : "Acheter des Billets"}}</a>
+          <a class="button" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Register/Tickets" : "Registrer/Billets"}}</a>
         </div>
     </div>
     </div>
@@ -123,6 +123,7 @@ export default {
           height: 100%;
           margin-bottom: 100px;
           cursor: pointer;
+          padding-top: 0px;
       `;
       document.getElementById("info").style = `
           padding-bottom: 50px;
@@ -243,6 +244,7 @@ export default {
   }
 }
 .banner {
+  padding-top: 100px;
   height: 80vh;
   background-size: cover;
   background-repeat: no-repeat;
@@ -271,6 +273,9 @@ export default {
 .title {
   margin-left: 20px;
   max-width: calc(100% - 40px);
+  h1 {
+    font-size: 60px;
+  }
 }
 .date {
   text-align: right;
@@ -302,6 +307,11 @@ export default {
   left: 50%;
   transform: translateX(-50%);
   padding-bottom: 20px;
+  // width: 50%;
+  // right: 0;
+  // padding-right: 20px;
+  // top: 50%;
+  // transform: translateY(-40%);
 }
 .day {
   font-family: 'Reservation Wide Blk';
@@ -349,7 +359,8 @@ export default {
   padding-top: 40px;
 }
 #map {
-  
+  box-shadow: 0px 9px 14px 0px rgb(0 0 0 / 20%);
+  border-radius: 20px;
   @media screen and (max-width: 800px) {
     height: 200px;
     width: 100%;
@@ -382,9 +393,7 @@ small {
   background: black;
   // min-height: 80vh;
 }
-// #banner {
-//   width: 600px;
-// }
+
 .snapshot {
   position: absolute;
   z-index: 2;
@@ -412,10 +421,13 @@ small {
 }
 .banner-image-wrapper {
   height: 100%;
+  // width: 50%;
+  // padding-top: 100px;
   position: relative;
-  background-size: cover;
+  background-size: contain;
   background-position: center;
   background-repeat: no-repeat;
+  background-color: #2F2F2F;
   img {
       &:after {
       content:'';
@@ -430,5 +442,10 @@ small {
       pointer-events: none;
     }
   }
+}
+.page-wrapper {
+  width: 80%;
+  margin: auto;
+  padding: 50px 0;
 }
 </style>
