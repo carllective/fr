@@ -55,9 +55,9 @@
         <p v-html="parsedInfo(info.Info)"></p>
       </div>
         <div class="ctas">
+          <a class="button black" target="_blank" v-if="info.Website_Link" :href="info.Website_Link">{{lang === "en" ? "Visit Website" : "Consulter le Site-web"}}</a>
           <a class="button" target="_blank" v-if="info.Calendar_Link" :href="info.Calendar_Link">{{lang === "en" ? "Save To Calendar" : "Télécharger dans le Calendrier"}}</a>
-          <a class="button" target="_blank" v-if="info.Website_Link" :href="info.Website_Link">{{lang === "en" ? "Visit Website" : "Consulter le Site-web"}}</a>
-          <a class="button" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Register/Tickets" : "Registrer/Billets"}}</a>
+          <a class="button red" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Register/Tickets" : "Registrer/Billets"}}</a>
         </div>
     </div>
     </div>
@@ -236,12 +236,7 @@ export default {
   padding: 60px 20px;
   margin: 0 auto;
   display: inline-block;
-  @media screen and (max-width: 800px) {
-    width: 100%;
-  }
-  @media screen and (min-width: 801px) {
-    width: 50%;
-  }
+ 
 }
 .banner {
   padding-top: 100px;
@@ -273,9 +268,6 @@ export default {
 .title {
   margin-left: 20px;
   max-width: calc(100% - 40px);
-  h1 {
-    font-size: 60px;
-  }
 }
 .date {
   text-align: right;
@@ -346,10 +338,13 @@ export default {
   }
 }
 .button {
-  &:not(.fullwidth) {
-    width: calc(50% - 20px);
-  }
-  margin: 10px;
+  // &:not(.fullwidth) {
+  //   width: calc(50% - 20px);
+  // }
+  padding: 12px;
+  max-width: 400px;
+  margin: 10px 0;
+  display: block;
 }
 .fullwidth {
     width: calc(100% - 20px);
@@ -367,7 +362,7 @@ export default {
   }
   @media screen and (min-width: 801px) {
     width: 50%;
-    min-height: 500px;
+    min-height: 300px;
     height: 100%;
   }
   
@@ -443,9 +438,23 @@ small {
     }
   }
 }
-.page-wrapper {
-  width: 80%;
-  margin: auto;
-  padding: 50px 0;
+
+@media screen and (max-width: 800px) {
+  .page-wrapper {
+    padding: 20px;
+  }
+  }
+@media screen and (min-width: 801px) {
+  .page-wrapper {
+    width: 80%;
+    margin: auto;
+    padding: 50px 0;
+  }
+}
+.red {
+  background: red;
+}
+.black {
+  background: black;
 }
 </style>
