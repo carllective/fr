@@ -70,6 +70,7 @@ export default new class Airtable {
           Vue.prototype.$sort_CTA = res.data.records[0].fields.Sort_CTA;
         }
         Vue.prototype.$og_image =  res.data.records[0].fields.og_image;
+        Vue.prototype.$bg_image =  res.data.records[0].fields.BG_Pattern[0].url;
         resolved(res);
       });
     });

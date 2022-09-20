@@ -1,6 +1,8 @@
 
 <template>
   <div id="meetspage">
+    <div :style="`position: absolute; left: 0; top: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none; opacity: .05; background-image: url(${$bg_image}); background-size: 20px;`"></div>
+
     <div class="snapshot">
       <a @click="isolate(`prompt`)">
       <img  src="../assets/snapshot.png"/> <p>Fullscreen Banner</p>
@@ -46,20 +48,30 @@
     <img :src="dataUrl" v-if="dataUrl"/>
 
     <div class="page-wrapper">
-        <div id="map"></div>
+      <div class="page"  v-if="info">
+        <h2>{{lang === "en" ? "Details" : "Détails"}}</h2>
 
-    <div class="page"  v-if="info">
-    
-      <div v-if="info.Info">
-       <h2>{{lang === "en" ? "Details" : "Détails"}}</h2>
-        <p v-html="parsedInfo(info.Info)"></p>
-      </div>
-        <div class="ctas">
-          <a class="button black" target="_blank" v-if="info.Website_Link" :href="info.Website_Link">{{lang === "en" ? "Visit Website" : "Consulter le Site-web"}}</a>
-          <a class="button" target="_blank" v-if="info.Calendar_Link" :href="info.Calendar_Link">{{lang === "en" ? "Save To Calendar" : "Télécharger dans le Calendrier"}}</a>
-          <a class="button red" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Register/Tickets" : "Registrer/Billets"}}</a>
+        <p v-if="info.Name"><strong>Meet:</strong> {{info.Name}}</p>
+          <p v-if="info.Address"><strong>Address:</strong> {{info.Address}}</p>
+          <p v-if="info.Month"><strong>Date:</strong> {{info.Month}} {{info.Day}}</p>
+          <p v-if="info.Time"><strong>Time:</strong> {{info.Time}}</p>
+          
+        <div v-if="info.Info">
+          <p v-html="parsedInfo(info.Info)"></p>
         </div>
-    </div>
+        
+          <div class="ctas">
+            <a class="button black" target="_blank" v-if="info.Website_Link" :href="info.Website_Link">{{lang === "en" ? "Visit Website" : "Consulter le Site-web"}}</a>
+            <a class="button" target="_blank" v-if="info.Calendar_Link" :href="info.Calendar_Link">{{lang === "en" ? "Save To Calendar" : "Télécharger dans le Calendrier"}}</a>
+            <a class="button red" target="_blank" v-if="info.Buy_Tickets_Link" :href="info.Buy_Tickets_Link">{{lang === "en" ? "Register/Tickets" : "Registrer/Billets"}}</a>
+          </div>
+      </div>
+      <!-- <br/> -->
+      <div class="imageandmap">
+        <div id="map"></div>
+        <img v-if="info.Image" :src="info.Image ? info.Image[0].url : ''"/>
+       
+      </div>
     </div>
   </div>
 </template>
@@ -231,12 +243,15 @@ export default {
   background: white;
   overscroll-behavior: none;
   overflow-x: hidden;
+  position: relative;
 }
 .page {
   padding: 60px 20px;
   margin: 0 auto;
   display: inline-block;
- 
+  text-align: left;
+  z-index: 2;
+  position: relative;
 }
 .banner {
   padding-top: 100px;
@@ -268,6 +283,7 @@ export default {
 .title {
   margin-left: 20px;
   max-width: calc(100% - 40px);
+  text-shadow: 4px 4px 10px rgba(0,0,0,0.85);
 }
 .date {
   text-align: right;
@@ -314,18 +330,9 @@ export default {
 .month {
   color: $highlightcol;
 }
-.page {
-  @media screen and (min-width: 801px) {
-    width: calc(50% - 60px);
-  }
-  @media screen and (max-width: 800px) {
-    width: calc(100% - 40px);
-  }
-  h2, p {
-    color: black;
-  }
-}
+
 .pageinfo {
+  
   width: 100%;
   p {
     margin-top: 10px;
@@ -353,25 +360,67 @@ export default {
 .ctas {
   padding-top: 40px;
 }
+.page {
+  width: calc(80% - 440px);
+  // @media screen and (min-width: 801px) {
+  //   max-width: 400px;
+  // }
+  @media screen and (max-width: 800px) {
+    width: calc(100% - 40px);
+  }
+  h2, p {
+    color: black;
+  }
+  display: inline-block;
+
+}
+.imageandmap {
+  // @media screen and (max-width: 800px) {
+  //   width: 100%;
+  // }
+  z-index: 2;
+  position: relative;
+  img {
+    width: 100%;
+    box-shadow: 0px 9px 14px 0px rgb(0 0 0 / 20%);
+    margin: auto;
+    border-radius: 20px;
+    @media screen and (max-width: 800px) {
+      width: 100%;
+    }
+  }
+  // min-width: 500px;
+  // min-height: 300px;
+  @media screen and (min-width: 801px) {
+    max-width: 400px;
+    height: 100%;
+  }
+  display: inline-block;
+}
 #map {
+  margin-bottom: 40px;
   box-shadow: 0px 9px 14px 0px rgb(0 0 0 / 20%);
   border-radius: 20px;
+  // width: 80%;
+  width: 100%;
   @media screen and (max-width: 800px) {
     height: 200px;
-    width: 100%;
   }
+  // min-width: 500px;
+  // min-height: 300px;
   @media screen and (min-width: 801px) {
-    width: 50%;
+    // width: 50%;
     min-height: 300px;
     height: 100%;
   }
   
   display: inline-block;
-  margin-right: 20px;
+  // margin-right: 20px;
   z-index: 0;
 }
-#map, .page {
-  vertical-align: middle;
+
+#map, .imageandmap {
+  vertical-align: top;
 }
 small {
   margin-left: 20px;
@@ -420,7 +469,11 @@ small {
   // padding-top: 100px;
   position: relative;
   background-size: contain;
-  background-position: center;
+  background-position: top;
+  @media screen and (min-width: 800px) {
+    background-size: cover;
+    background-position: center;
+  }
   background-repeat: no-repeat;
   background-color: #2F2F2F;
   img {
@@ -439,22 +492,28 @@ small {
   }
 }
 
-@media screen and (max-width: 800px) {
-  .page-wrapper {
-    padding: 20px;
-  }
-  }
-@media screen and (min-width: 801px) {
-  .page-wrapper {
+
+.page-wrapper {
+  position: relative;
+  text-align: center;
+  @media screen and (min-width: 801px) {
     width: 80%;
     margin: auto;
     padding: 50px 0;
   }
+  @media screen and (max-width: 800px) {
+    padding: 20px;
+  }
 }
+
+
 .red {
   background: red;
 }
 .black {
   background: black;
+}
+strong {
+  color: black;
 }
 </style>
