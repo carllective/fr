@@ -223,7 +223,7 @@ export default {
   // max-width: 1240px;
   max-width: 700px;
 
-  padding: 100px 20px 40px;
+  padding: 150px 20px 40px;
   margin: 40px auto 0;
   //  @media screen and (max-width: 1239px){
   //   max-width: 600px;
@@ -236,7 +236,6 @@ export default {
   font-size: 14px;
   width: 50%;
   display: inline-block;
- 
 }
   span {
     text-transform: capitalize;
@@ -384,6 +383,10 @@ h1 {
     margin: 0;
     display: inline-block;
     height: 100%;
+    @media screen and (max-width: 800px) {
+        font-size: 18px;
+        line-height: 1.2;
+    }
   }
   h3 {
     font-family: "Reservation Wide Blk";
@@ -400,9 +403,8 @@ h1 {
 }
 
 .pre-title {
-  // color: $highlightcol;
-  font-size: 20px;
   margin-bottom: 40px;
+  font-family: Helvetica;
 }
 .meet_card_inner {
   position: absolute;
@@ -476,7 +478,7 @@ h1 {
   h3 span {
     font-family: "Reservation Wide Bd";
     color: $highlightcol;
-    font-size: 20px;
+    // font-size: 20px;
     width: calc(100% - 30px);
     display: inline-block;
   }
@@ -486,6 +488,12 @@ h1 {
 }
 .time {
   padding-top: 10px;
+  .small {
+    @media screen and (max-width: 800px) {
+      font-size: 12px;
+      line-height: 1.2;
+    }
+  }
 }
 .title-section {
   padding-bottom: 30px;
