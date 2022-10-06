@@ -86,11 +86,20 @@ export default new class Airtable {
           return {...i.fields, id: i.id};
         })
         // Hide past ones by date
-        .filter((i => parseInt(i.Date.split("-").join("")) >= this.numericDate()))
+        .filter((i => {
+          if (i.Date) {
+            return parseInt(i.Date.split("-").join("")) >= this.numericDate();
+          }
+        }))
+        .sort((a, b) => {
+          if (a.Date) {
+            return parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join(""));
+          }
+        });
         // Hide the "Hidden" ones
-        .filter(i => i.Hidden !== true)
+        // .filter(i => i.Hidden !== true)
         // Sort in order by Date
-        .sort((a, b) => parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join("")));
+        
         var counter = 0;
 
         for (let i = 0; i < meets.length; i++) {
@@ -143,7 +152,6 @@ export default new class Airtable {
           
           if (meets[i].Name) 
             meets[i]['url'] = `${meets[i].Name.toLowerCase().split(" ").join("-")}-${meets[i].Month.toLowerCase()}-${meets[i].Day.toLowerCase()}`;
-
 
           counter++;
         }

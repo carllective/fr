@@ -51,11 +51,12 @@
       </div>
     </div>
     <div class="meets_cards" v-if="meets.length">
-      <router-link class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :to="`/${item.url}`">
+      <router-link class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :to="item.url ? `/${item.url}` : ``">
         <div :class="`meet_card ${item.Today ? `todaymeet` : ``}`" :style="`background-image: url(${item.Image ? item.Image[0].url : ''})`">
           <div class="meet_card_inner">
               <div class="title">
                 <h2 v-if="item.Name">{{item.Name}}</h2>
+                <h2 v-else>Entering...</h2>
                 <h3 class="location" v-if="item.Town && item.Province">{{item.Town}}, {{item.Province}}</h3>
               </div>
               <div class="date">
@@ -274,7 +275,7 @@ h1 {
 .meet_card {
   background: black;
   min-height: 150px;
-  border-radius: 20px;
+  border-radius: 10px;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;

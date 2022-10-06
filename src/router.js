@@ -19,6 +19,10 @@ const router = new VueRouter({
       component: () => import("./components/MapPage.vue"),
     },
     {
+      path: "/shop",
+      component: () => import("./components/ShopPage.vue"),
+    },
+    {
       path: "/calendar",
       component: () => import("./components/CalendarPage.vue"),
     },
