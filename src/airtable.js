@@ -7,9 +7,11 @@ import store from "./store";
 const baseId = "appTstPp0g20fQA2b";
 const tables = "tblkFpWzKkk9IbNIf";
 const tables2 = "tbljvU0FGVULYx6rM";
+const tables3 = 'tbl0HJ8Lm306rhcTU';
 const api = "keyaJEowLnEfKAamU";
 const url = `https://api.airtable.com/v0/${baseId}/${tables}?api_key=${api}`;
 const url2 = `https://api.airtable.com/v0/${baseId}/${tables2}?api_key=${api}`;
+const url3 = `https://api.airtable.com/v0/${baseId}/${tables3}?api_key=${api}`;
 
 
 
@@ -71,6 +73,27 @@ export default new class Airtable {
         }
         Vue.prototype.$og_image =  res.data.records[0].fields.og_image;
         Vue.prototype.$bg_image =  res.data.records[0].fields.BG_Pattern[0].url;
+        resolved(res);
+      });
+    });
+  }
+
+  init_shop() {
+    return new Promise((resolved) => {
+      axios.get(url2).then((res) => {
+        Vue.prototype.$shop = res.data.records[1].fields;
+        console.log(res.data.records[1].fields);
+        resolved(res);
+      });
+    });
+  }
+
+  init_shop_items() {
+    return new Promise((resolved) => {
+      axios.get(url3).then((res) => {
+        Vue.prototype.$shopItems = [...res.data.records].sort((a, b) => a.fields.Order - b.fields.Order).filter(i => !i.fields.Type); // just mine
+        Vue.prototype.$externalShopItems = [...res.data.records].sort((a, b) => a.fields.Order - b.fields.Order).filter(i => i.fields.Type); // external
+        console.log(Vue.prototype.$shopItems);
         resolved(res);
       });
     });

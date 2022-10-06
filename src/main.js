@@ -30,7 +30,14 @@ function initVue() {
     })
 }
 Vue.prototype.$geoAPI = geo;
-Vue.prototype.$geoAPI.init({format: 'json'}).then((Promise.all([airtable.init_airtable(), airtable.init_airtable2()]).then(() => initVue())));
+Vue.prototype.$geoAPI.init({format: 'json'})
+.then((Promise.all([
+  airtable.init_airtable(),
+  airtable.init_airtable2(), 
+  airtable.init_shop(),
+  airtable.init_shop_items()
+])
+.then(() => initVue())));
 
   
   

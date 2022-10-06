@@ -7,33 +7,28 @@
     </transition>
     <div class="logobar">
       <ul class="logobar-inner">
-          <ul class="desktop nav left">
-            <li>
-               <router-link :to="lang === 'en' ? '/calendar' : '/calendrier'">{{lang === "en" ? 'Calendar' : 'Calendrier'}}</router-link>
-            </li>
-            <li>
-              <router-link to="/map">Map</router-link>
-            </li>
-            <li class="coming_soon">
-              {{lang === "en" ? 'Shop' : 'Magasin'}}
-            </li>
-          </ul>
 
           <li>
             <router-link to="/">
               <img class="logo" alt="Carllective logo" src="./assets/Carllective Wht.png"/>
             </router-link>
           </li>
-            <ul class="desktop nav right">
-            <li class="coming_soon">
-              {{lang === "en" ? 'Settings' : 'Réglages'}}
-            </li>
-            <li>
-              <div class="langs">
-                <small><a href="https://carllective.ca">English</a></small>
-                <small><a href="https://fr.carllective.ca">Français</a></small>
-              </div>
-            </li>
+            <ul class="desktop nav">
+              <li>
+               <router-link :to="lang === 'en' ? '/calendar' : '/calendrier'">{{lang === "en" ? 'Calendar' : 'Calendrier'}}</router-link>
+              </li>
+              <li>
+                <router-link to="/map">Map</router-link>
+              </li>
+              <li>
+                <router-link to="/shop">Shop</router-link>
+              </li>
+              <li>
+                <div class="langs">
+                  <small><a class="langs_a" href="https://carllective.ca">English</a></small>
+                  <small><a class="langs_a" href="https://fr.carllective.ca">Français</a></small>
+                </div>
+              </li>
           </ul>
           <div class="langs mobile">
             <small><a href="https://carllective.ca">English</a></small>
@@ -51,7 +46,8 @@
             <router-link to="/" class="mobile_a"></router-link>
             Home
           </li>
-           <li class="coming_soon">
+           <li>
+            <router-link class="mobile_a" to="/shop"></router-link>
             {{lang === "en" ? 'Shop' : 'Magasin'}}
           </li>
            <li>
@@ -62,9 +58,9 @@
               <router-link to="/map" class="mobile_a"></router-link>
               {{lang === "en" ? 'Map' : 'Carte'}}
           </li>
-          <li class="coming_soon">
+          <!-- <li class="coming_soon">
             {{lang === "en" ? 'Settings' : 'Réglages'}}
-          </li>
+          </li> -->
         </ul>
       </div>
   </div>
@@ -141,7 +137,7 @@ ul {
   padding: 0;
   li {
     font-family: "Reservation Wide Bd";
-    padding:0 20px;
+    padding: 0 15px;
     position: relative;
     font-size: 14px;
   }
@@ -151,9 +147,12 @@ ul {
   }
 }
 .nav {
-  position: absolute;
+  // position: absolute;
+  text-align: center;
+  margin: auto;
+  margin-top: 20px;
   top: 50%;
-  transform: translateY(-50%);
+  // transform: translateY(-50%);
   width: calc(45vw - 30px);
 }
 .left {
@@ -196,6 +195,7 @@ ul {
     flex-wrap: wrap;
     width: 100%;
     text-align: center;
+    justify-content: center;
     li {
       padding: 10px 0;
       width: calc(20% - 1px);
@@ -291,6 +291,42 @@ ul {
   @media screen and (min-width: 1001px) {
     display: none;
   }
+}
+.router-link-active {
+  color: red;
+}
+.logobar a:not(.langs_a) {
+    position: relative;
+    &:before, &:after {
+      content: '';
+      position: absolute;
+      width: 0%;
+      height: 3px;
+      background: white;
+      bottom: 0;
+    }
+    .router-link-active {
+      width: 100%;
+    }
+    &:after {
+      width: 0%;
+      right: 0;
+      opacity: 1;
+      transition: width .5s ease;
+    }
+  &:hover {
+    &:before {
+      content: '';
+      width: 100%;
+      transition: width .5s ease;
+    }
+    &:after {
+      width: 100%;
+      right: 0;
+      opacity: 0;
+    }
+  }
+  
 }
 
 </style>

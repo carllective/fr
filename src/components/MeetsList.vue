@@ -299,6 +299,14 @@ h1 {
 
 .dropdown {
 
+  p:hover {
+    background: #959595;
+    transition: all .5s ease;
+  }
+  p {
+    transition: all .5s ease;
+
+  }
   .chevron {
     display: inline-block;
     position: absolute;
