@@ -279,8 +279,9 @@ export default {
   .image {
     box-shadow: 0px 0px 14px 0px rgb(0 0 0 / 90%);
     // position: absolute;
-    height: 300px;
+    max-height: 300px;
     margin-bottom: 20px;
+    max-width: 100%;
     z-index: 2;
     left: 50%;
     // transform: translateX(-50%);
