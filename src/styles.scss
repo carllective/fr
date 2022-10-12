@@ -21,6 +21,18 @@
     font-display: swap;
 }
 
+@font-face {
+    font-family: 'ReservationWide-Regular';
+    src: url('@/assets/ReservationWide-Regular.eot');
+    src: url('@/assets/ReservationWide-Regular.eot') format('embedded-opentype'),
+        url('@/assets/ReservationWide-Regular.woff2') format('woff2'),
+        url('@/assets/ReservationWide-Regular.woff') format('woff');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+
 p, a, strong, span, input, .pre-title {
     font-family: helvetica;
   font-weight: 100;
@@ -37,7 +49,7 @@ h1 {
     }
 }
 h2, h3, h4 {
-    font-family: "Reservation Wide Bd";
+    font-family: "ReservationWide-Regular";
     margin: 0;
 }
 h2 {

@@ -16,33 +16,46 @@
       <img src="../assets/Icon.png"/>
     </div>
       <div class="info" id="info">
+      <img class="image" v-if="info.Image" :src="info.Image ? info.Image[0].url : ''"/>
+        
+        <br/>
         <div class="instagrams" v-if="instagrams.length">
           <transition v-for="(item, i) in instagrams" :key="i">
             <a :href="instagramsLink(item)" target="_blank">
+              <div class="instagramicon">
+                <svg fill="#000000" xmlns="http://www.w3.org/2000/svg"  viewBox="0 0 30 30" width="30px" height="30px">    <path d="M 9.9980469 3 C 6.1390469 3 3 6.1419531 3 10.001953 L 3 20.001953 C 3 23.860953 6.1419531 27 10.001953 27 L 20.001953 27 C 23.860953 27 27 23.858047 27 19.998047 L 27 9.9980469 C 27 6.1390469 23.858047 3 19.998047 3 L 9.9980469 3 z M 22 7 C 22.552 7 23 7.448 23 8 C 23 8.552 22.552 9 22 9 C 21.448 9 21 8.552 21 8 C 21 7.448 21.448 7 22 7 z M 15 9 C 18.309 9 21 11.691 21 15 C 21 18.309 18.309 21 15 21 C 11.691 21 9 18.309 9 15 C 9 11.691 11.691 9 15 9 z M 15 11 A 4 4 0 0 0 11 15 A 4 4 0 0 0 15 19 A 4 4 0 0 0 19 15 A 4 4 0 0 0 15 11 z"/></svg>
+              </div>
               <small v-html="item"></small>
             </a>
           </transition>
         </div>
-        
-        <br/>
         <div class="title">
           <h1 v-if="info.Name">{{info.Name}}</h1>
         </div>
-        <div class="location">
-          <p class="addy" v-if="info.Address">{{info.Address}}</p>
-          <h3 v-if="info.Town">{{info.Town}}, {{info.Province}}</h3>
-        </div>
         <div class="date">
           <span v-if="lang === 'en'">
-            <h4 class="month" v-if="info.Month">{{info.Month}}</h4>
-            <h3 class="day" v-if="info.Day">{{info.Day}}</h3>
+            <h3 class="month" v-if="info.Month">
+              <span class="month padright">{{info.Month.slice(0, 3)}}. {{info.Day}}</span>
+              <span class="boldreserv">{{info.Time}}</span>
+            </h3>
         </span>
         <span v-else>
             <h3 class="day" v-if="info.Day">{{info.Day}}</h3>
             <h4 class="month" v-if="info.Month">{{info.Month}}</h4>
         </span>
-         <p class="time">{{info.Time}}</p>
         </div>
+        <div class="location">
+            <p class="addy" v-if="info.Address">{{info.Address}} 
+              <b>(<a :href="`https://maps.google.com/?q=${info.Address}`" target="_blank"><small>View in Maps</small></a>)</b>
+            </p>
+          
+          <!-- <h3 v-if="info.Town">{{info.Town}}, {{info.Province}}</h3> -->
+        </div>
+
+        <!-- <div class="border"></div> -->
+
+       
+        
       </div>
     </div>
     <img :src="dataUrl" v-if="dataUrl"/>
@@ -254,23 +267,35 @@ export default {
   position: relative;
 }
 .banner {
-  padding-top: 100px;
-  height: 80vh;
+  padding-top: 00px;
+  height: 95vh;
   background-size: cover;
   background-repeat: no-repeat;
   background-position: center;
   position: relative;
   background-color: black;
   overflow: hidden;
+  .image {
+    box-shadow: 0px 0px 14px 0px rgb(0 0 0 / 90%);
+    // position: absolute;
+    height: 300px;
+    margin-bottom: 20px;
+    z-index: 2;
+    left: 50%;
+    // transform: translateX(-50%);
+
+  }
     &:after {
       content:'';
       position: absolute;
       left: 0;
       bottom: -1px;
       width: 100%;
-      height: 60%;
+      // height: 60%;
+      height: 100%;
+      opacity: .8;
       background: rgb(0,0,0);
-      background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(20,20,20,0.6167060574229692) 47%, rgba(0,0,0,0) 100%);
+      // background: linear-gradient(0deg, rgba(0,0,0,1) 0%, rgba(20,20,20,0.6167060574229692) 47%, rgba(0,0,0,0) 100%);
       z-index: 0;
       pointer-events: none;
     }
@@ -281,26 +306,49 @@ export default {
 }
 
 .title {
-  margin-left: 20px;
+  // margin-left: 20px;
   max-width: calc(100% - 40px);
   text-shadow: 4px 4px 10px rgba(0,0,0,0.85);
+  h1 {
+    margin-bottom: 10px;
+    @media screen and (min-width: 800px) {
+      font-size: 50px;
+    }  
+  }
+}
+
+.padright {
+  padding-right: 15px;
 }
 .date {
-  text-align: right;
+  // text-align: right;
+  text-align: center;
   right: 20px;
   // position: absolute;
   bottom: 20px;
   z-index: 1;
-  width: calc(30% - 20px);
+  // width: calc(30% - 20px);
+  width: 100%;
 }
 .location {
-  width: calc(70% - 40px);
-  margin: 0 20px;
+  // width: calc(70% - 40px);
+  width: 100%;
+  // margin: 0 20px;
 }
 .addy {
   margin-top: 0;
+  b, small {
+    font-weight: bold;
+  }
+  b {
+    padding-left: 10px;
+  }
 }
-
+.border {
+  width: 50%;
+  margin: auto;
+  border-bottom: 1px solid white;
+}
 .time {
   margin-bottom: 0;
   color: $highlightcol;
@@ -308,6 +356,7 @@ export default {
 
 .info {
   position: absolute;
+  text-align: center;
   bottom: 0;
   z-index: 1;
   max-width: 900px;
@@ -321,6 +370,7 @@ export default {
   // top: 50%;
   // transform: translateY(-40%);
 }
+
 .day {
   font-family: 'Reservation Wide Blk';
   font-size: 30px;
@@ -328,7 +378,18 @@ export default {
   padding-bottom: 5%;
 }
 .month {
+  font-size: 24px;
+  margin-bottom: 20px;
   color: $highlightcol;
+  span {
+  font-size: 24px;
+  color: $highlightcol;
+  }
+  font-family: "ReservationWide-Regular";
+}
+
+.boldreserv {
+  font-family: 'Reservation Wide Blk';
 }
 
 .pageinfo {
@@ -422,16 +483,35 @@ export default {
 #map, .imageandmap {
   vertical-align: top;
 }
-small {
-  margin-left: 20px;
-  display: inline-block;
-  font-size: 14px;
-  font-family: Helvetica;
-  color: black;
-  background: white;
-  padding: 10px;
-  border-radius: 100px;
+.instagrams {
+  .instagramicon {
+    display: inline-block;
+    height: calc(100% - 4px);
+    vertical-align: middle;
+  }
+  svg {
+    height: 20px;
+    vertical-align: top;
+  }
+  margin-bottom: 20px;
+  a {
+    background: white;
+    padding: 2px 10px 2px 2px;
+    border-radius: 100px;
+    display: inline-block;
+    margin: 0 5px;
+  }
+  small {
+    // margin-left: 20px;
+    vertical-align: middle;
+    display: inline-block;
+    // font-size: 10px;
+    font-family: Helvetica;
+    // color: white;
+    color: black;
+  }
 }
+
 #canvas {
   width: 100%;
   background: black;
@@ -459,16 +539,20 @@ small {
 }
 .logo img {
   position: absolute;
-  top: 20px;
-  left: 20px;
+  top: 50px;
+  left: 50%;
   width: 60px;
+  transform: translateX(-50%);
+  filter: invert(1);
+  z-index: 2;
 }
 .banner-image-wrapper {
   height: 100%;
   // width: 50%;
   // padding-top: 100px;
   position: relative;
-  background-size: contain;
+  background-size: cover;
+  // background-size: contain;
   background-position: top;
   @media screen and (min-width: 800px) {
     background-size: cover;

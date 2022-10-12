@@ -99,7 +99,9 @@ export default {
 
 <style lang="scss">
 @import "./styles.scss";
-
+* {
+  -webkit-font-smoothing: antialiased;
+}
 body, html {
   margin: 0;
   overscroll-behavior: none;

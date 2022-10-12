@@ -61,14 +61,13 @@
               </div>
               <div class="date">
                 <span v-if="lang === 'en'">
-                  <h4 class="month" v-if="item.Month">{{item.Month}}</h4>
-                  <h3 class="day" v-if="item.Day">{{item.Day}}</h3>
+                  <h3 class="month" v-if="item.Month && item.Day">{{item.Month.slice(0,3)}}. {{item.Day}}</h3>
                 </span>
                 <span v-else-if="lang === 'fr'">
-                  <h3 class="day" v-if="item.Day">{{item.Day}}</h3>
-                  <h4 class="month" v-if="item.Month">{{item.Month}}</h4>
+                  <h3 class="month" v-if="item.Month && item.Day">{{item.Day}} {{item.Month.slice(0,3)}}.</h3>
+
                 </span>
-                <p class="time"><span class="small">{{item.Time}}</span></p>
+                <h4 class="time">{{item.Time}}</h4>
               </div>
             </div>
           
@@ -274,6 +273,7 @@ h1 {
 }
 .meet_card {
   background: black;
+  border: .5px solid white;
   min-height: 150px;
   border-radius: 10px;
   background-size: cover;
@@ -290,11 +290,14 @@ h1 {
     top: 0;
     width: 100%;
     height: 100%;
-    background: rgb(30,30,30);
-    background: linear-gradient(0deg, rgba(30,30,30,0.8856136204481793) 0%, rgba(20,20,20,0.6167060574229692) 47%, rgba(0,0,0,0) 100%);
+    background: rgb(0,0,0);
+background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0,0.7105435924369747) 49%, rgba(0,0,0,0.4668461134453782) 73%, rgba(0,0,0,0) 100%);
     z-index: 0;
     pointer-events: none;
   }
+}
+.month {
+  font-family: "Reservation Wide Blk";
 }
 
 .dropdown {
@@ -376,6 +379,11 @@ h1 {
   height: 100%;
   display: inline-block;
   width: 75%;
+  h2 {
+    font-family: "Reservation Wide Blk";
+    font-weight: 100;
+    line-height: 1.15;
+  }
 }
 .date {
   // width: 25%;
@@ -397,17 +405,9 @@ h1 {
         line-height: 1.2;
     }
   }
-  h3 {
-    font-family: "Reservation Wide Blk";
-    font-size: 30px;
-    margin: 0;
-    display: inline-block;
-    height: 100%;
-    color: $highlightcol;
-  }
-  h4 {
-    color: $highlightcol;
 
+  h3, h4 {
+    color: $highlightcol;
   }
 }
 
@@ -425,7 +425,9 @@ h1 {
   }
 }
 .location {
-  color: $highlightcol;
+  color: white;
+  font-weight: 100 !important;
+  font-family: 'ReservationWide-Regular' !important;
 }
 .header, .select {
   display: inline-block;
@@ -498,6 +500,7 @@ h1 {
 .time {
   padding-top: 10px;
   .small {
+    color: $highlightcol;
     @media screen and (max-width: 800px) {
       font-size: 12px;
       line-height: 1.2;
