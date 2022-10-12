@@ -46,6 +46,7 @@
         </div>
         <div class="location">
             <p class="addy" v-if="info.Address">{{info.Address}} 
+              <br/>
               <b>(<a :href="`https://maps.google.com/?q=${info.Address}`" target="_blank"><small>View in Maps</small></a>)</b>
             </p>
           
@@ -355,15 +356,15 @@ export default {
 }
 
 .info {
+  padding: 0 20px 20px;
   position: absolute;
   text-align: center;
   bottom: 0;
   z-index: 1;
   max-width: 900px;
-  width: 100%;
+  width: calc(100% - 40px);
   left: 50%;
   transform: translateX(-50%);
-  padding-bottom: 20px;
   // width: 50%;
   // right: 0;
   // padding-right: 20px;
