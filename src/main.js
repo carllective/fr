@@ -14,10 +14,10 @@ if (window.location.href.includes("fr.")) {
   store.commit("setLang", "en");
 }
 
-store.commit("setLoading", true);
-setTimeout(() => {
-  store.commit("setLoading", false);
-}, 2000);
+// store.commit("setLoading", true);
+// setTimeout(() => {
+//   store.commit("setLoading", false);
+// }, 2000);
 
 function initVue() {
   return new Promise((res) => {

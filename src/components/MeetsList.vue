@@ -8,23 +8,25 @@
       <div class="today">
         <div class="small" id="currentLocation" @click="location() === locationCTA ? requestLocation() : null">
           <h3>
-            <img class="icon" alt="Location icon" src="../assets/white/Location.svg"/>
+            <img class="icon" alt="Location icon" src="../assets/red/Location.svg"/>
             <span v-html="location()"></span>
           </h3>
         </div>
 
         <div class="small" id="currentDate">
         <h3>
-          <img class="icon" alt="Calendar icon" src="../assets/white/Calendar.svg"/>
+          <img class="icon" alt="Calendar icon" src="../assets/red/Calendar.svg"/>
           <div class="date">
             <span>
-              <h4>{{todaysDate("month")}}</h4>
-              <h3>{{todaysDate("day")}}</h3>
+              <h3><b>{{todaysDate("month").slice(0, 3)}}. {{todaysDate("day")}}</b></h3>
             </span>
           </div>
         </h3>
       </div>
     </div>
+
+
+    
       <div class="select">
         <div :class="`dropdown-wrapper ${!your_location ? `disabled` : ``}`">
           <p class="label">{{$sort_CTA}}</p>
@@ -48,7 +50,12 @@
             </ul>
           </div>
         </div>
+        <form class="search" ref="searchform" @submit.prevent="search">
+          <p class="label">Search</p>
+          <input type="text" ref="search" class="text" placeholder="Search" @change="search"/>
+        </form>
       </div>
+
     </div>
     <div class="meets_cards" v-if="meets.length">
       <router-link class="meet_card_link" name="meet_card_link" v-for="(item, i) in meets" :key="i" :to="item.url ? `/${item.url}` : ``">
@@ -133,6 +140,8 @@ export default {
       return `${this.your_location.city}, ${this.your_location.state_code}, ${this.your_location.country}`;
     },
     sortByProvince(prov) {
+      this.$refs.searchform.reset();
+
        if (prov.en === "Canada-Wide") {
         this.meets = [...this.$meets];
         this.meets_sorted_by_province = [...this.$meets];
@@ -149,7 +158,18 @@ export default {
       // console.log(this.meets);
 
     },
+    search() {
+      if (this.$refs.search.value) {
+        this.meets = [...this.$meets].filter((item) => {
+          return JSON.stringify(item).toLowerCase().includes(this.$refs.search.value.toLowerCase());
+        });
+      } else {
+        this.sortByProvince(this.activeProvince);
+      }
+      
+    },
     sortBy(km) {
+      this.$refs.searchform.reset();
       // this.activeFilter = km;
       this.$store.commit("setActiveFilter", km);
       // Reset to default sortin with province filter, by date
@@ -198,7 +218,7 @@ export default {
       meets_sorted_by_province: this.$meets,
       showDropdown: false,
       showProvDropdown: false,
-      locationCTA: "Please enable location, then click me.",
+      locationCTA: "Enable location, then click me.",
     }
   },
   mounted() {
@@ -222,12 +242,11 @@ export default {
 #meets {
   // max-width: 1240px;
   max-width: 700px;
-
   padding: 150px 20px 40px;
   margin: 40px auto 0;
-  //  @media screen and (max-width: 1239px){
-  //   max-width: 600px;
-  //  }
+   @media screen and (max-width: 800px){
+    padding-top: 100px;
+   }
 }
 .today {
   width: 100%;
@@ -301,6 +320,14 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
 }
 
 .dropdown {
+  .chevron {
+    display: inline-block;
+    position: absolute;
+    right: 20px;
+    transition: all .5s ease;
+    z-index: 3;
+    color: white;
+  }
 
   p:hover {
     background: #959595;
@@ -310,13 +337,7 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
     transition: all .5s ease;
 
   }
-  .chevron {
-    display: inline-block;
-    position: absolute;
-    right: 20px;
-    transition: all .5s ease;
-    z-index: 3;
-  }
+
   .up {
     transform:rotate(180deg);
     transition: all .5s ease;
@@ -330,9 +351,11 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
   p {
     margin: 0;
     padding: 10px;
-    background: #424242;
+    background: #6e6e6e;
     width: calc(100% - 20px);
     display: block;
+    color: white;
+    // font-weight: bold;
   }
   ul {
     overflow: hidden;
@@ -349,12 +372,13 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
   }
   li {
     width: calc(100% - 20px);
-    background: #424242;
+    background: #e7e7e7;
     padding: 10px 0 10px 10px;
     cursor: pointer;
     font-family: Helvetica;
-      transition: all .5s ease;
-    border-bottom: 1px solid #424242;
+    transition: all .5s ease;
+    border-bottom: 1px solid grey;
+    color: black;
     &:hover {
       transition: all .5s ease;
       background: grey;
@@ -390,7 +414,11 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
   text-align: right;
   vertical-align: middle;
   display: inline-block;
-
+  b {
+    font-family: "Reservation Wide Blk";
+    color: $highlightcol;
+    display: inline-block;
+  }
   p {
     margin: 0;
   }
@@ -412,8 +440,11 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
 }
 
 .pre-title {
-  margin-bottom: 40px;
+  margin-bottom: 20px;
   font-family: Helvetica;
+  @media screen and (min-width: 801px) {
+    padding-bottom: 20px;
+  }
 }
 .meet_card_inner {
   position: absolute;
@@ -435,9 +466,13 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
 .select {
   .dropdown-wrapper {
     display: inline-block;
-    width: calc(50% - 10px);
+    width: calc(30% - 10px);
+    @media screen and (max-width: 800px) {
+      width: calc(50% - 5px);
+      padding-bottom: 20px;
+    }
     &:first-child {
-      padding-right: 20px;
+      padding-right: 10px;
     }
   }
  width: 100%;
@@ -450,7 +485,10 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
 }
 .header {
   width: 100%;
-  margin-bottom: 10px;
+  margin-bottom: 0;
+  @media screen and (min-width: 801px) {
+    margin-bottom: 10px;
+  }
 }
 .meet_card_link-enter-active {
   transition: all .5s ease;
@@ -521,5 +559,28 @@ background: linear-gradient(0deg, rgba(0,0,0,0.8477984943977591) 16%, rgba(0,0,0
 .disabled {
   filter: invert(.4);
   pointer-events: none;
+}
+
+.search {
+  display: inline-block;
+  margin-left: auto;
+  width: calc(40% - 20px);
+  padding-left: 10px;
+  @media screen and (max-width: 800px) {
+    width: calc(100% - 20px);
+    padding-left: 0;
+  }
+  .text {
+    width: 100%;
+  }
+  input {
+    color: black;
+    border: none; 
+    border-radius: 10px;
+    padding: 10px;
+    &:focus {
+      outline: none;
+    }
+  }
 }
 </style>

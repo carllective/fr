@@ -1,10 +1,11 @@
 <template>
+
   <div id="app" :class="lang === 'fr' ? 'fr' : 'en'">
-    <transition appear name="loading" :key="loading">
+    <!-- <transition appear name="loading" :key="loading">
       <div class="loading" v-if="loading">
         <img class="loadingimage" alt="Carllective loading animation" src="./assets/C.gif"/>
       </div>
-    </transition>
+    </transition> -->
     <div class="logobar">
       <ul class="logobar-inner">
 
@@ -64,6 +65,7 @@
         </ul>
       </div>
   </div>
+
 </template>
 
 <script>
@@ -99,6 +101,8 @@ export default {
 
 <style lang="scss">
 @import "./styles.scss";
+
+
 * {
   -webkit-font-smoothing: antialiased;
 }
@@ -121,6 +125,15 @@ body, html {
   a, li {
     display: inline-block;
     vertical-align: middle;
+  }
+  @media screen and (max-width: 1000px) {
+    li {
+      width: calc(50% - 20px);
+      text-align: left;
+      display: inline-block;
+      padding: 0;
+      margin-left: 10px;
+    }
   }
 }
 .logobar {
@@ -211,7 +224,7 @@ ul {
   left: 0;
   bottom: 0;
   width: 100%;
-  background: #2F2F2F;
+  background: black;
   z-index: 11;
 }
 .coming_soon {
@@ -280,6 +293,7 @@ ul {
     padding: 5px;
     border-radius: 5px;
     color: black;
+    font-size: 10px;
   }
   small:last-child {
     padding-left: 5px;
@@ -290,6 +304,10 @@ ul {
   }
 }
 .mobile {
+  width: calc(50% - 20px);
+  display: inline-block;
+  text-align: right;
+  margin-right: 10px;
   @media screen and (min-width: 1001px) {
     display: none;
   }

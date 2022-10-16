@@ -44,9 +44,13 @@ export default {
 #footer {
   min-height: 10vh;
   // background: #2F2F2F;
-  background: black;
+  background: rgb(37,37,37);
+background: linear-gradient(0deg, rgba(37,37,37,1) 0%, rgba(0,0,0,1) 100%);
   position: relative;
   padding: 20px 20px;
+  @media screen and (max-width: 1000px) {
+    padding-bottom: 100px;
+  }
   .signup {
     padding: 20px;
     max-width: 400px;
@@ -63,6 +67,13 @@ export default {
   }
   .footer-inner {
     width: 100%;
+    a {
+      font-size: 12px;
+      font-weight: bold;  
+    }
+    p {
+      padding: 0;
+    }
   }
 }
 
