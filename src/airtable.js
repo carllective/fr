@@ -13,11 +13,11 @@ const url = `https://api.airtable.com/v0/${baseId}/${tables}?api_key=${api}`;
 const url2 = `https://api.airtable.com/v0/${baseId}/${tables2}?api_key=${api}`;
 const url3 = `https://api.airtable.com/v0/${baseId}/${tables3}?api_key=${api}`;
 
-
-
 export default new class Airtable {
   constructor() {
     // this.process_latlng();
+    this.offsetMeets = [];
+    
   }
 
   distance(coords) {
@@ -82,7 +82,6 @@ export default new class Airtable {
     return new Promise((resolved) => {
       axios.get(url2).then((res) => {
         Vue.prototype.$shop = res.data.records[1].fields;
-        console.log(res.data.records[1].fields);
         resolved(res);
       });
     });
@@ -93,7 +92,6 @@ export default new class Airtable {
       axios.get(url3).then((res) => {
         Vue.prototype.$shopItems = [...res.data.records].sort((a, b) => a.fields.Order - b.fields.Order).filter(i => !i.fields.Type); // just mine
         Vue.prototype.$externalShopItems = [...res.data.records].sort((a, b) => a.fields.Order - b.fields.Order).filter(i => i.fields.Type); // external
-        console.log(Vue.prototype.$shopItems);
         resolved(res);
       });
     });
@@ -102,19 +100,22 @@ export default new class Airtable {
   // Fetch the meets from Airtable
   init_airtable() {
     return new Promise((resolved) => {
-      axios.get(url).then((res) => {
-        
-        // Meets object to include its fields and ID
-        var meets = res.data.records.map(i => {
+      axios.get(url).then(async () => {
+
+        // Fetches ALL the items, even if total is over 100
+        var Airtable = require('airtable'); 
+        const base = new Airtable({apiKey: api}).base(baseId);
+        this.offsetMeets = await base('Table 1').select().all();
+
+        var meets = this.offsetMeets.map(i => {
           return {...i.fields, id: i.id};
         })
-        // Hide past ones by date
-        .filter((i => {
+        .filter((i => { // Hide past ones by date
           if (i.Date) {
             return parseInt(i.Date.split("-").join("")) >= this.numericDate();
           }
         }))
-        .sort((a, b) => {
+        .sort((a, b) => { // Sort by date
           if (a.Date) {
             return parseInt(a.Date.split(":")[0].split("T")[0].split("-").join("")) - parseInt(b.Date.split(":")[0].split("T")[0].split("-").join(""));
           }
@@ -131,7 +132,7 @@ export default new class Airtable {
             var day_int = meets[i]['Date'].split(":")[0].split("T")[0].split("-")[2];
             var year_int = meets[i]['Date'].split("-")[0];
           }
-          if (!meets[i]['Lat'] || !meets[i]['Long']) {
+          if (!meets[i]['Lat'] && !meets[i]['Long'] && meets[i]['Address']) {
             this.process_latlng(meets[i].id, meets[i].Address).then((coords) => {
 
               // Sets the coordinates right after it logs it into Airtable
@@ -140,7 +141,7 @@ export default new class Airtable {
               // console.log(meets[i]['Lat'], meets[i]['Long']);
 
             });  
-          } else {
+          } else if (meets[i]['Address']) {
             meets[i]['DistanceFromMe'] = this.distance({lat: parseFloat(meets[i]['Lat']), lng: parseFloat(meets[i]['Long'])});
           }
 
@@ -169,7 +170,6 @@ export default new class Airtable {
             if (parsedDateFr.normalize('NFD').replace(/\p{Diacritic}/gu, "") === `${meets[i]['Day']} ${meets[i]['Month']} ${year_int}`.toLowerCase()) {
               meets[i]['Today'] = true;
             } 
-
           }
             
           
