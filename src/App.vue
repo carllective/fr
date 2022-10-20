@@ -10,7 +10,7 @@
       <ul class="logobar-inner">
 
           <li>
-            <router-link to="/">
+            <router-link to="/" class="logolink">
               <img class="logo" alt="Carllective logo" src="./assets/Carllective Wht.png"/>
             </router-link>
           </li>
@@ -24,12 +24,16 @@
               <li>
                 <router-link to="/shop">Shop</router-link>
               </li>
+              <li class="submitevent" @click="showSubmitForm = !showSubmitForm">
+                <a>Submit An Event!</a>
+              </li>
               <li>
                 <div class="langs">
                   <small><a class="langs_a" href="https://carllective.ca">English</a></small>
                   <small><a class="langs_a" href="https://fr.carllective.ca">Français</a></small>
                 </div>
               </li>
+              
           </ul>
           <div class="langs mobile">
             <small><a href="https://carllective.ca">English</a></small>
@@ -38,6 +42,31 @@
       </ul>
       
     </div>
+    <transition appear>
+    <div class="submitForm" v-if="showSubmitForm">
+      <div class="close" @click="showSubmitForm = false"><h2>X</h2></div>
+      <h2>Submit a Car Meet, Automotive Event, or Car Expo/Show!</h2>
+      <form @submit.prevent="submitForm" ref="form">
+        <label><p>Name</p></label>
+        <input ref="name" type="text"/>
+        <br/>
+        <label><p>Date *</p></label>
+        <input required ref="date" type="text"/>
+        <br/>
+        <label><p>Instagram @</p></label>
+        <input ref="ig" type="text"/>
+        <br/>
+        <br/>
+        <label><p>Website / Original Post URL *</p></label>
+        <input required ref="website" type="text"/>
+        <br/>
+        <label><p>Poster Image</p></label>
+        <input type="file" id="img" name="img" ref="img" accept="image/*"/>
+        <input class="button submitbutton" type="submit"/>
+      </form>
+      <!-- <VueRecaptcha sitekey="6Ld50JkiAAAAAM4DehBWvXoy4_4LeHRNTq6uQYp0"></VueRecaptcha> -->
+    </div>
+  </transition>
     <router-view :scroll="scroll" class="view"></router-view>
 
     <FooterArea/>
@@ -71,10 +100,13 @@
 <script>
 import FooterArea from './components/FooterArea.vue'
 import {mapState} from "vuex";
+import Airtable from "./airtable.js";
+// import { VueRecaptcha } from 'vue-recaptcha';
 export default {
   name: 'App',
   components: {
-    FooterArea
+    FooterArea,
+    // VueRecaptcha
   },
   watch: {
 
@@ -84,16 +116,49 @@ export default {
     ...mapState(["loading", "lang"])
   },
   methods: {
+    async submitForm() {
+      
+      new Promise((resolve) => {
+        if (this.$refs.img.files[0]) {
+          var axios = require('axios');
+          var fileinput = this.$refs.img.files[0];
+          const formData = new FormData();
+          formData.append( "image", fileinput ); // has to be named 'image'!
+
+          axios.post( 'https://api.imgbb.com/1/upload?key=3314dc7a8197bab1f6f1b512c8595eb7', formData )
+            .then( res => { 
+              resolve(res.data.data.display_url);
+            } )
+        } else {
+          resolve('');
+        }
+      }).then((imgUrl) => { 
+        
+        var submission = {
+          name: this.$refs.name.value,
+          date: this.$refs.date.value,
+          ig: this.$refs.ig.value,
+          website: this.$refs.website.value,
+          img: imgUrl
+        }
+        this.$refs.form.reset();
+        this.showSubmitForm = false;
+        Airtable.submitEvent(submission);
+
+      })
+    }
   },
   data() {
     return {
-      scroll: null
+      scroll: null,
+      showSubmitForm: false,
     }
   },
   mounted() {
     window.addEventListener("scroll", (e) => {
       this.scroll = e;
     })
+    
   }
   
 }
@@ -152,13 +217,13 @@ ul {
   padding: 0;
   li {
     font-family: "Reservation Wide Bd";
-    padding: 0 15px;
+    padding: 0 10px;
     position: relative;
-    font-size: 14px;
   }
   a {
     font-family: "Reservation Wide Bd";
     text-decoration: none;
+    font-size: 12px;
   }
 }
 .nav {
@@ -273,7 +338,7 @@ ul {
 .loading-leave-to {
   opacity: 0;
 }
-.langs {
+.langs{
   // @media screen and (min-width: 1001px) {
   //   position: absolute;
   //   right: 0;
@@ -315,7 +380,7 @@ ul {
 .router-link-active {
   color: red;
 }
-.logobar a:not(.langs_a) {
+.logobar a:not(.langs_a, .logolink, .submitevent a) {
     position: relative;
     &:before, &:after {
       content: '';
@@ -346,7 +411,75 @@ ul {
       opacity: 0;
     }
   }
-  
 }
-
+.submitevent {
+  padding-right: 20px;
+  a {
+    background: $highlightcol;
+    border-radius: 4px;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+}
+.submitForm {
+  overflow-y: scroll;
+  position: fixed;
+  z-index: 10;
+  width: 80%;
+  height: 80%;
+  background: rgba(49, 2, 2, 0.85);
+  border-radius: 20px;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  max-width: 600px;
+  h2 {
+    padding: 40px 0 20px;
+    line-height: 1.25;
+    text-align: center;
+    margin: auto;
+    width: 80%;
+    max-width: 400px;
+    font-family: "Reservation Wide Blk";
+  }
+  p {
+    margin-bottom: 5px;
+  }
+  form {
+    width: 80%;
+    padding: 0;
+    margin: auto;
+  }
+  input:not(#img,.submitbutton) {
+    width: 100%;
+    color: black;
+  }
+  input:focus {
+    outline: none;
+  }
+  .submitbutton {
+    background: green;
+    color: white;
+    margin-top: 30px;
+    width: 100%;
+    margin-bottom: 30px;
+  }
+  .close {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+    background: white;
+    padding: 5px;
+    border-radius: 20px;
+    width: 30px;
+    height:30px;
+    margin: auto;
+    cursor: pointer;
+    h2 {
+      margin: auto;
+      padding: 0;
+      color: black;
+    }
+  }
+}
 </style>

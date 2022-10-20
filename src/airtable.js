@@ -51,6 +51,24 @@ export default new class Airtable {
     })
   }
 
+  submitEvent(obj) {
+    var Airtable = require('airtable');
+    var base = new Airtable({apiKey: api}).base('appTstPp0g20fQA2b');
+    base('Archival').create([
+      {
+        "fields": {
+          "Name": `SUBMISSION: ` + obj.name,
+          "Info": `Date: ${obj.date}, Instagram: @${obj.ig}`,
+          "Website_Link": obj.website,
+          "Image": [
+            {
+              "url": obj.img
+            }
+          ]
+        }
+      }]);
+  }
+
   // Fetch the rest of the website content from Airtable
   init_airtable2() {
     return new Promise((resolved) => {
