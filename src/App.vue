@@ -449,6 +449,7 @@ ul {
   transition: all .5s ease;
   opacity: 1;
   overflow-y: scroll;
+  overflow-x: hidden;
   position: fixed;
   z-index: 10;
   width: 80%;
@@ -477,8 +478,11 @@ ul {
     margin: auto;
   }
   input:not(#img,.submitbutton) {
-    width: 100%;
+    width: calc(100% - 10px);
     color: black;
+    padding: 5px;
+    border: none;
+    border-radius: 3px;
   }
   input:focus {
     outline: none;
