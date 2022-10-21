@@ -9,7 +9,7 @@
     <div class="logobar">
       <ul class="logobar-inner">
 
-          <li>
+          <li class="logoli">
             <router-link to="/" class="logolink">
               <img class="logo" alt="Carllective logo" src="./assets/Carllective Wht.png"/>
             </router-link>
@@ -35,14 +35,16 @@
               </li>
               
           </ul>
+          
           <div class="langs mobile">
+           
             <small><a href="https://carllective.ca">English</a></small>
             <small><a href="https://fr.carllective.ca">Français</a></small>
-            </div>
+          </div>
       </ul>
       
     </div>
-    <transition appear>
+    <transition appear name="submit">
     <div class="submitForm" v-if="showSubmitForm">
       <div class="close" @click="showSubmitForm = false"><h2>X</h2></div>
       <h2>Submit a Car Meet, Automotive Event, or Car Expo/Show!</h2>
@@ -91,6 +93,9 @@
           <!-- <li class="coming_soon">
             {{lang === "en" ? 'Settings' : 'Réglages'}}
           </li> -->
+          <li class="submitevent" @click="showSubmitForm = !showSubmitForm">
+              <a v-html="lang === 'en' ? `Submit an Event` : `Soumission d'événement`"></a>
+          </li>
         </ul>
       </div>
   </div>
@@ -191,9 +196,14 @@ body, html {
     display: inline-block;
     vertical-align: middle;
   }
+  .logoli a {
+    width: 100%;
+  }
   @media screen and (max-width: 1000px) {
+    text-align: left;
     li {
-      width: calc(50% - 20px);
+      // width: calc(50% - 20px);
+      width: 25%;
       text-align: left;
       display: inline-block;
       padding: 0;
@@ -233,7 +243,7 @@ ul {
   margin-top: 20px;
   top: 50%;
   // transform: translateY(-50%);
-  width: calc(45vw - 30px);
+  width: 100%;
 }
 .left {
   left: 0;
@@ -255,6 +265,7 @@ ul {
 .mobile_logobar {
   -webkit-box-shadow: 0px -7px 14px 0px rgba(0,0,0,0.2); 
   box-shadow: 0px -7px 14px 0px rgba(0,0,0,0.2);
+  font-size: 10px;
   .mobile_a {
     position: absolute;
     left: 0;
@@ -276,7 +287,11 @@ ul {
     width: 100%;
     text-align: center;
     justify-content: center;
+    display: inline-block;
+    margin: 0;
     li {
+      display: inline-block;
+      vertical-align: middle;
       padding: 10px 0;
       width: calc(20% - 1px);
       &:not(:last-child) {
@@ -366,10 +381,11 @@ ul {
   
   @media screen and (max-width: 1000px) {
     padding-top: 20px;
+    width: calc(75% - 20px);
   }
 }
 .mobile {
-  width: calc(50% - 20px);
+  // width: calc(50% - 20px);
   display: inline-block;
   text-align: right;
   margin-right: 10px;
@@ -419,9 +435,19 @@ ul {
     border-radius: 4px;
     padding: 5px 10px;
     cursor: pointer;
+    color: white;
+  }
+  @media screen and (max-width: 1000px) {
+    display: inline-block;
+    a {
+      font-size: 10px;
+      display: block;
+    }
   }
 }
 .submitForm {
+  transition: all .5s ease;
+  opacity: 1;
   overflow-y: scroll;
   position: fixed;
   z-index: 10;
@@ -482,4 +508,14 @@ ul {
     }
   }
 }
+
+.submit-enter-active, .submit-leave-to {
+  opacity: 0;
+  transition: all .5s ease;
+}
+.submit-enter-to  {
+  opacity: 1;
+  transition: all .5s ease;
+}
+
 </style>
