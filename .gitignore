@@ -1,6 +1,15 @@
 .DS_Store
 node_modules
-/dist
+Fr CNAME
+En CNAME
+vue.config.js
+src
+package.json
+package-lock.json
+jsconfig.json
+babel.config.js
+README.md
+
 
 
 # local env files
