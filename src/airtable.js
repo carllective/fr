@@ -4,14 +4,6 @@ import Vue from "vue";
 import latlng from "latitude-longitude";
 import store from "./store";
 // import store from "./store.js";
-const baseId = "appTstPp0g20fQA2b";
-const tables = "tblkFpWzKkk9IbNIf";
-const tables2 = "tbljvU0FGVULYx6rM";
-const tables3 = 'tbl0HJ8Lm306rhcTU';
-const api = "keyaJEowLnEfKAamU";
-const url = `https://api.airtable.com/v0/${baseId}/${tables}?api_key=${api}`;
-const url2 = `https://api.airtable.com/v0/${baseId}/${tables2}?api_key=${api}`;
-const url3 = `https://api.airtable.com/v0/${baseId}/${tables3}?api_key=${api}`;
 
 export default new class Airtable {
   constructor() {
@@ -30,7 +22,7 @@ export default new class Airtable {
   process_latlng(id, address) {
     return new Promise((coordsRes) => {
       var Airtable = require('airtable');
-      var base = new Airtable({apiKey: api}).base('appTstPp0g20fQA2b');
+      var base = new Airtable({apiKey: process.env.VUE_APP_api}).base('appTstPp0g20fQA2b');
       var parsedString = address.split(" ").join("%20");
       axios.get(`https://api.geoapify.com/v1/geocode/search?text=${parsedString}&apiKey=7f74dc1e41fd4ffaa8377ea7d95ce297`).then((res) => {
         return {
@@ -53,7 +45,7 @@ export default new class Airtable {
 
   submitEvent(obj) {
     var Airtable = require('airtable');
-    var base = new Airtable({apiKey: api}).base('appTstPp0g20fQA2b');
+    var base = new Airtable({apiKey: process.env.VUE_APP_api}).base('appTstPp0g20fQA2b');
     base('Archival').create([
       {
         "fields": {
@@ -72,7 +64,7 @@ export default new class Airtable {
   // Fetch the rest of the website content from Airtable
   init_airtable2() {
     return new Promise((resolved) => {
-      axios.get(url2).then((res) => {
+      axios.get(process.env.VUE_APP_url2).then((res) => {
         // console.log(res.data.records[0].fields);
 
         // French translation
@@ -98,7 +90,7 @@ export default new class Airtable {
 
   init_shop() {
     return new Promise((resolved) => {
-      axios.get(url2).then((res) => {
+      axios.get(process.env.VUE_APP_url2).then((res) => {
         Vue.prototype.$shop = res.data.records[1].fields;
         resolved(res);
       });
@@ -107,7 +99,7 @@ export default new class Airtable {
 
   init_shop_items() {
     return new Promise((resolved) => {
-      axios.get(url3).then((res) => {
+      axios.get(process.env.VUE_APP_url3).then((res) => {
         Vue.prototype.$shopItems = [...res.data.records].sort((a, b) => a.fields.Order - b.fields.Order).filter(i => !i.fields.Type); // just mine
         Vue.prototype.$externalShopItems = [...res.data.records].sort((a, b) => a.fields.Order - b.fields.Order).filter(i => i.fields.Type); // external
         resolved(res);
@@ -118,11 +110,11 @@ export default new class Airtable {
   // Fetch the meets from Airtable
   init_airtable() {
     return new Promise((resolved) => {
-      axios.get(url).then(async () => {
+      axios.get(process.env.VUE_APP_url).then(async () => {
 
         // Fetches ALL the items, even if total is over 100
         var Airtable = require('airtable'); 
-        const base = new Airtable({apiKey: api}).base(baseId);
+        const base = new Airtable({apiKey: process.env.VUE_APP_api}).base(process.env.VUE_APP_baseId);
         this.offsetMeets = await base('Table 1').select().all();
 
         var meets = this.offsetMeets.map(i => {
