@@ -1,5 +1,6 @@
-const { defineConfig } = require('@vue/cli-service');
-process.env.VUE_APP_baseId = 'appTstPp0g20fQA2b';
+const { defineConfig } = require('@vue/cli-service')
+
+process.env.VUE_APP_baseId = "appTstPp0g20fQA2b";
 process.env.VUE_APP_tables = "tblkFpWzKkk9IbNIf";
 process.env.VUE_APP_tables2 = "tbljvU0FGVULYx6rM";
 process.env.VUE_APP_tables3 = 'tbl0HJ8Lm306rhcTU';

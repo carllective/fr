@@ -3,7 +3,7 @@ var axios = require('axios');
 import Vue from "vue";
 import latlng from "latitude-longitude";
 import store from "./store";
-// import store from "./store.js";
+
 
 export default new class Airtable {
   constructor() {
